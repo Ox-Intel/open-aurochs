@@ -1,0 +1,65 @@
+name: Public e2e (Cypress)
+
+on: [push]
+
+jobs:
+  public:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10",]
+        containers: [1, 2, 3, 4, 5]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - uses: actions/cache@v2
+      with:
+        path: |
+          ~/.cache/Cypress
+          node_modules
+        key: my-cache-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+    - name: Add cypress
+      run: |
+        npm i cypress@10.11.0 @simonsmith/cypress-image-snapshot
+    - name: Build prod image and start server
+      run: |
+        cp Dockerfile.ci Dockerfile
+        cp docker-compose.e2e.yml docker-compose.yml
+        cp Procfile.ci Procfile.dev
+        cp env.ci .env
+        docker compose up --build -d
+    - name: Populate database and warm cache
+      run: |
+        docker compose run --rm aurochs bash -c "python3 manage.py migrate"
+        docker compose run --rm aurochs bash -c "python3 manage.py setup_e2e_accounts"
+        docker compose run --rm aurochs bash -c "python3 manage.py clear_cache"
+        docker compose run --rm aurochs bash -c "python3 manage.py warm_cache"
+    - name: Wait for valid server response
+      run: |
+        ./bin/wait_for_server.sh
+    - name: Check github actions machine spec
+      run: |
+        npx cypress info
+    - name: Cypress run
+      uses: cypress-io/github-action@v4.2.0
+      with:
+        browser: chrome
+        record: true
+        parallel: true
+        headless: true
+        spec: |
+          ./cypress/e2e/*spec.js
+          ./cypress/e2e/public/*spec.js
+      env:
+        DEBUG: "@cypress/github-action"
+        # pass the Dashboard record key as an environment variable
+        CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+        # pass GitHub token to allow accurately detecting a build vs a re-run build
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        # Recommended: pass the GitHub token lets this action correctly
+        # determine the unique run id necessary to re-run the checks
+        # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

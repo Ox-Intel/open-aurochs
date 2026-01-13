@@ -1,0 +1,128 @@
+{% extends "webapp/base.html" %}{% load aurochs_helpers static compress %}
+
+{% block title %}Ox Springbok{% endblock %}
+
+{% block css %}
+  {# <link href="{{ request.scheme }}://{{ request.get_host }}{% static "compiled/css/home.css" %}" rel="stylesheet" /> #}
+  <style type="text/css">
+  body {
+    font-family: sans-serif;
+  }
+  form input, form textarea {
+    margin: 40px;
+    padding: 5px;
+  }
+  input[type="submit"] {
+    background-color: #00c683;
+    color: #FFF;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 10px;
+  }
+  h1 {
+    margin-top: 40px;
+    margin-bottom: 10px;
+    font-size: 3em;
+  }
+  h2 {
+    margin-top: 30px;
+    margin-bottom: 10px;
+    font-size: 2em;
+  }
+  </style>
+{% endblock %}
+
+
+{% block body %}
+  <div id="home">
+    <home-page />
+  </div>
+  {% if chat_response %}
+  <div style="margin: 100px auto; width: 70%;  display: block">
+  <p>Recommendations below.</p>
+  <p>Response times:
+    <ul>
+       <li>Framework Generation: {{diff_framework|floatformat:1}}s </li>
+       <li>Url Fetching: {{diff_urls|floatformat:1}}s </li>
+       <li>Scoring: {{diff_scoring|floatformat:1}}s </li>
+       <li>Total: {{diff_total|floatformat:1}}s </li>
+    </ul>
+  </p>
+
+  <b>Considered roles:</b>
+  <ul>
+  {% for r in roles %}
+    <li>{{r}}</li>
+  {% endfor %}
+  </ul>
+  </div>
+  {% endif %}
+  <form action="." method="POST" style="margin: 100px auto; width: 70%;  display: block">
+  {% csrf_token %}
+    Make me a framework for:
+    <input name="question" class="input" style="border: 1px solid black; width: 70%" value="{{question|default:"deciding what movie to see this weekend."}}"/><br>
+    {# choosing an airbnb #}
+    With this context for constructing the framework (optional):
+    <textarea name="framework_context" style="border: 1px solid black; width: 100%; height: 8rem;">{{framework_context|default:"I'd prefer something the whole family can see."}}</textarea>
+    {# evaluating the current threat to US national security #}
+    And score these topics, subjects, or URLs (one per line):
+    <textarea name="subjects" style="border: 1px solid black; width: 100%; height: 8rem;" value="">
+{% if subjects %}{{subjects}}{% else %}
+https://www.rottentomatoes.com/m/the_little_mermaid_2023/reviews?intcmp=rt-scorecard_tomatometer-reviews
+https://www.rottentomatoes.com/m/fast_x/reviews?intcmp=rt-scorecard_tomatometer-reviews
+https://www.rottentomatoes.com/m/guardians_of_the_galaxy_vol_3/reviews?intcmp=rt-scorecard_tomatometer-reviews
+{# https://www.rottentomatoes.com/m/the_little_mermaid_2023/reviews?intcmp=rt-what-to-know_read-critics-reviews #}
+{# https://www.rottentomatoes.com/m/fast_x/reviews?intcmp=rt-what-to-know_read-critics-reviews #}
+{# https://www.rottentomatoes.com/m/guardians_of_the_galaxy_vol_3/reviews?intcmp=rt-what-to-know_read-critics-reviews #}
+{# https://en.wikipedia.org/wiki/China #}
+{# https://en.wikipedia.org/wiki/Russia #}
+{# https://www.airbnb.com/rooms/13079743?adults=6&children=0&infants=0&pets=0&wishlist_item_id=11002230477543&check_in=2023-12-26&check_out=2024-01-02&source_impression_id=p3_1684861787_xgNt%2FApax4nNXsif #}
+{# https://www.airbnb.com/rooms/43334931?adults=6&children=0&infants=0&pets=0&wishlist_item_id=11002131555680&check_in=2023-12-26&check_out=2024-01-02&previous_page_section_name=1000 #}
+    {% endif %}
+
+    </textarea><br>
+    Finally, share some context that you'd like Ox to consider when creating and evaluating your framework.  This could be things like your risk tolerances, specific context on any web sources you've used, or other information.  what's on these URLs, and what you want Ox to look for.  Regular English is fine here.
+    <textarea name="context" style="border: 1px solid black; width: 100%; height: 8rem;">{% if context %}{{context}}{% else %}a list of reviews and information from rotten tomatoes about the movie. Just focus on the reviews.{% endif %}</textarea>
+    <input type="submit" class="button" style="background: #AAA;" value="Generate Framework and Recommendations" />
+  </form>
+
+
+{% if chat_response %}
+<div style="margin: 100px auto; width: 70%;  display: block">
+<h1>Recommendations</h1>:
+<ul>
+{% for sc in sorted_scorecards %}
+  <li>{{sc.ox_score|floatformat:1}} - <b>{{sc.name}}</b></li>
+{% endfor %}
+</ul>
+
+<h2>Framework</h2>
+<ul>
+{% for name, c in criteria_with_weights.items %}
+  <li> <b>{{c.weight}}</b> - <b>{{c.name}}</b><br>{{c.description}}</li>
+{% endfor %}
+</ul>
+</div>
+
+{% if scores %}
+<div style="margin: 100px auto; width: 70%;  display: block">
+<h2>Scorecards</h2>
+{% for url, sc in scorecards.items %}
+  <h2>{{sc.name|title}}</h2>
+  <p><i>{{url}}</i></p>
+  <div><b>Ox Score: {{sc.ox_score|floatformat:1}}</b></div>
+  <p>Scores by Criteria:</p>
+  <ul>
+  {% for s in sc.scores %}
+    <li><b>{{s.score}} - {{s.name}}</b><br>{{s.explanation}}</li>
+  {% endfor %}
+  </ul>
+{% endfor %}
+
+{% endif %}
+</div>
+{% endif %}
+
+
+
+{% endblock %}

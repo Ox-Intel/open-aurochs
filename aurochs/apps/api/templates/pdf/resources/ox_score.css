@@ -1,0 +1,124 @@
+<style type="text/css">
+    .ox_score_with_horns {
+        background-color: #8E24FF;
+        color: #FFF;
+        padding: 0.25rem;
+        height: 3rem;
+        width: 3rem;
+        border-radius: 0.25rem;
+        display: block;
+        position: absolute;
+        right: 0;
+        text-align: center;
+        
+    }
+    .ox_score_with_horns .horns {
+        display: block;
+        color: #FFF;
+        width: 3rem;
+        height: 1.75rem;
+        margin: 7px auto 0 auto;
+        vertical-align: middle;
+        position: absolute;
+        top: 4px;
+    }
+    .ox_score_with_horns .score {
+        display: inline-block;
+        font-weight: 900;
+        font-size: 1.5em;
+/*            margin-top: -1.75rem;*/
+        position: absolute;
+        top: 26px;
+        width: 3rem;
+        text-align: center;
+    }
+    .ox_score_with_horns .star {
+        position: absolute;
+        display: block;
+        top: 26px;
+        right: 6px;
+        margin-left: -1px;
+    }
+
+
+    .ox_score {
+        line-height: 1.5em;
+        background: #8E24FF;
+        color:  #FFF;
+        display: inline-block;
+        /*width: 120px;*/
+        font-family: "acf", "Helvetica Neue", "Helvetica", "sans-serif";
+        text-align: center;
+        border-radius: 6px;
+        padding:  32px 6px 0 6px;
+/*        width:  90px;*/
+    }
+    .ox_score .score {
+        font-size:  60px;
+        font-family: "acf", "Helvetica Neue", "Helvetica", "sans-serif";
+        display: inline-block;
+        font-weight: 800;
+        margin: 0;
+        margin-left:  2px;
+    }
+    .ox_score .percent {
+        font-size:  24px;
+        margin-left:  -4px;
+        display: inline-block;
+    }
+    .ox_score .label {
+        font-size:  10px;
+        display:  block;
+        clear:  both;
+        text-transform: uppercase;
+        opacity: 0.8;
+        margin:  -8px 0 6px 0;
+    }
+    .ox_score.small {
+        padding:  18px 12px 0 12px;
+/*        width: 104px;*/
+    }
+    .ox_score.small .score {
+        font-size:  30px;
+        margin-left:  2px;
+    }
+    .ox_score.small .percent {
+        font-size:  18px;
+        margin-left:  -4px;
+        /*margin-left:  -2px;*/
+    }
+    .ox_score.small .label {
+        font-size:  8px;
+        display:  block;
+        margin:  -8px 0 0px 0;
+    }
+    .ox_score.inverted {
+        background: #FFF;
+        color:  #8E24FF;
+        opacity:  1;
+
+    }
+        /*used for white label reports*/
+    .ox_score.white {
+        background: #234c81;
+        color: #ffffff;
+        opacity:  1;
+
+    }
+    header .report_scores.pinned_top_right {
+        position: fixed;
+        top:  -90px;
+        right:  60px;
+        text-align: right;
+        padding: 0;
+    }
+
+
+    .report_scores.pinned_bottom_left {
+        position: fixed;
+        bottom: -10px;
+        left:  0px;
+        text-align: right;
+        padding: 0;
+    }
+</style>

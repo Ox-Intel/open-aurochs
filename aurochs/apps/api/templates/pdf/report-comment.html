@@ -1,0 +1,278 @@
+{% load aurochs_helpers %}
+<html>
+<head>
+    <title>{{ title }}</title>
+    {% include "pdf/resources/fonts.css" %}
+    {% include "pdf/resources/common.css" %}
+    <style type="text/css">
+        h2 { 
+            margin-bottom: -2.25rem;
+        }
+        .framework_heading {
+            margin-bottom: 3rem;
+        }
+        .framework_heading .inline-donut {
+            margin-top: -3px;
+        }
+        h3 {
+            margin-bottom: 7px;
+        }
+        .hero_donut {
+            width: 260px;
+            height: 260px;
+            margin: 20px auto;
+        }
+        body {
+            page-break-before:always;
+        }
+        .noise_floater {
+            text-align: right;
+            float: right;
+            margin-right: 0px;
+            margin-top: -20px;
+            width: 120px;
+            margin-bottom: 4px;
+        }
+        .noise_floater .badge_container {
+            margin-right: 0px;
+            width: 120px;
+            text-align: right;
+        }
+        .noise_floater .badge_container .badge {
+            margin-right: 0px;
+            text-align: right;
+        }
+        .criteria_bar {
+            width: 100%;
+            position: relative;
+            height: 18px;
+            margin-top: 4px;
+            margin-bottom: 8px;
+        }
+        .criteria_bars h3 {
+            margin-bottom: 2px;
+            font-size: 1.2em;
+        }
+        .criteria_bar .inner, .criteria_bar .outer {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 20px;
+        }
+        .criteria_bar .inner {
+            display: block;
+            height: 20px;
+            z-index: 3;
+        }
+        .criteria_bar .outer {
+            display: block;
+            position: relative;
+            opacity: 0.3;
+            z-index: 2;
+        }
+        .criteria {
+            break-inside: avoid;
+            margin-top: 8px;
+        }
+        .comment {
+            margin: 12px 0 1px 1rem;
+            break-inside: avoid;
+        }
+        .comment .scorer {
+            width: 50%;
+        }
+        .comment .name {
+            font-weight: bold;
+            margin-left: 4px;
+            margin-right: 6px;
+        }
+        .comment .scored_at {
+            font-size: 0.8rem;
+        }
+        .comment .comments {
+            font-size: 13px;
+            line-height: 13px;
+            margin-right: 80px;
+        }
+        .score_visual {
+            float: right;
+/*            width: 40%;*/
+            margin-top: 4px;
+            margin-right: 29px;
+            margin-left: 10px;
+            color: #FFF;
+            width: 20px;
+            text-align: center;
+        }
+        .score_box {
+            font-size: 0.9rem;
+            font-weight: 800;
+            padding: 8px 3px 3px 3px;
+            border-radius: 0.25rem;
+            border: 1px solid #000;
+            color: #000;
+            font-weight: 600;
+            width: 1.2rem;
+            height: 1rem;
+            vertical-align: middle;
+        }
+        .average_ox_score .ox_score_with_horns {
+            margin-right: 6px;
+        }
+        .comment {
+            margin-top: 16px;
+        }
+        .scorer {
+            display: block;
+            vertical-align: middle;
+            height: 25px;
+            padding: 4px;
+        }
+        .scorer .avatar {
+            float: left;
+            display: block;
+            margin-top: 8px;
+            padding-top: 4.5px;
+            padding-bottom: 2.5px;
+            margin-right: 3px;
+        }
+        .scorer .name {
+            margin-top: 10px;
+        }
+        .scorer .scored_at {
+            margin-top: 7px;
+        }
+        .framework_heading .name {
+            margin-bottom: 6px;
+        }
+        .comments {
+            margin-left: 6px;
+            break-inside: avoid;
+        }
+        .no_comments {
+            color: #AAA;
+        }
+        .skipped {
+            float: right;
+            color: #AAA;
+            margin-top: 14px;
+            font-size: 0.8em;
+            margin-right: -16px;
+        }
+        {% if distribution_text %}
+         @page {
+            @bottom-center {
+                font-family: "acf", "Helvetica Neue", "Helvetica", "sans-serif";
+                color: #000;
+                font-weight: 400;
+                font-size: 1.1em;
+                content: "{{distribution_text|safe}}";
+                margin: 45px 0px 0px 0px;
+            }
+        }
+        {% endif %}
+
+    </style>
+</head>
+<body>
+<header>
+    <div class="org_name">
+        {{ org_name }}
+    </div>
+    <svg id="OX_logo_top_right" class="ox_horns_header" xmlns="http://www.w3.org/2000/svg"
+         width="180px" height="70px"
+         viewBox="0 0 789 880">
+        {% include "pdf/resources/_ox_logo_path_horns_only.svg" %}
+    </svg>
+    
+</header>
+<div class="content">
+    <div class="framework">
+
+        <table class="framework_heading">
+            <tr>
+                <td class="name">
+                    <h2><span class="inline-donut">{% render_donut_chart f %}</span> {{ f.name }}</h2>
+                </td>
+                <td class="average_ox_score">
+                    <div class="ox_score_with_horns">
+                        <svg class="horns" viewBox="0 0 789 880">{% include "pdf/resources/_ox_logo_path_horns_only_white.svg" %}</svg>
+                        <div class="score">{% framework_report_ox_score f report  %}</div>
+                        {% if f.has_skipped  %}
+                        <div class="star">*</div>
+                        {% endif %}
+                    </div>
+                </td>
+            </tr>
+        </table>        
+
+        {% for c in f.criteria %}
+        <div class="criteria">
+            <div class="noise noise_floater">
+                {% noise_badge_skip_na scores_by_criteria|get_item:c.ox_id|get_item:'stddev' %}
+            </div>
+            <h3>{{ c.name }}</h3>
+            <div class="criteria_bar">
+                <div class="inner" style="background-color: {% criteria_color c.index %}; width: {{ scores_by_criteria|get_item:c.ox_id|get_item:"average"|multiply:10 }}%; z-index: 3;"></div>
+                <div class="outer" style="background-color: {% criteria_color c.index %}; width: 100%; opacity: 0.3; z-index: 2"></div>
+            </div>
+            <div class="comment_container">
+            {% for scs in scores_by_criteria|get_item:c.ox_id|get_item:'scores_including_skipped' %}
+                <div class="comment">
+                    <div class="score_visual">
+                        {# {% dot_plot_single scs.score|floatformat:0 %} #}
+                        {% if scs.score is not None %}
+                        <div class="score_box" style="border-color: {% criteria_color_outline c.index %};">{{scs.score|floatformat:0}}</div>
+                        {% else %}
+                            <div class="skipped">Skipped</div>
+                        {% endif %}
+                    </div>
+                    <div class="scorer">
+                        <div class="inline_block avatar" style="background-color: {% avatar_color scs.scorecard.scorer %};">{{scs.scorecard.scorer.full_name|slice:1}}</div>
+                        <div class="inline_block name">{{scs.scorecard.scorer.full_name}}</div>
+                        <div class="inline_block scored_at">{{scs.modified_at|date:"F d, Y"}}</div>
+                    </div>
+                    <div class="comments {% if not scs.comment %}no_comments{% endif %}">
+                        {{scs.comment|default:"No comments"|linebreaks}}
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+        
+    </div>
+</div>
+<footer>
+    <div class="section_blocks">
+        <div class="footer_section first">
+            <div class="name">Overview</div>
+            <div class="bar"></div>
+        </div>
+        <div class="footer_section center">
+            <div class="name">Frameworks</div>
+            <div class="bar"></div>
+        </div>
+        {% if not skip_comments %}<div class="footer_section center active">
+            <div class="name">Scores</div>
+            <div class="bar"></div>
+        </div>{% endif %}
+
+        {# <div class="footer_section center active"> #}
+            {# <div class="name">Scorecards</div> #}
+            {# <div class="bar"></div> #}
+        {# </div> #}
+        <div class="footer_section {% if has_sources %}center{% else %}last{% endif %}">
+            <div class="name">Notes</div>
+            <div class="bar"></div>
+        </div>
+        {% if has_sources %}<div class="footer_section last">
+            <div class="name">Sources</div>
+            <div class="bar"></div>
+        </div>{% endif %}
+    </div>
+</footer>
+
+</body>
+</html>

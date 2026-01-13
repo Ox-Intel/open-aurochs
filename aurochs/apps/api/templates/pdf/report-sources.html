@@ -1,0 +1,107 @@
+{% load aurochs_helpers %}
+<html>
+<head>
+    <title>{{ title }}</title>
+    {% include "pdf/resources/fonts.css" %}
+    {% include "pdf/resources/common.css" %}
+    <style type="text/css">
+        {% if distribution_text %}
+         @page {
+            @bottom-center {
+                font-family: "acf", "Helvetica Neue", "Helvetica", "sans-serif";
+                color: #000;
+                font-weight: 400;
+                font-size: 1.1em;
+                content: "{{distribution_text|safe}}";
+                margin: 45px 0px 0px 0px;
+            }
+        }
+        {% endif %}
+
+
+        .link_icon {
+            color: rgb(0, 180, 238);
+            width: 60px;
+            margin-right: 20px;
+        }
+        .name {
+            font-size: 1.4em;
+            font-weight: 700;
+        }
+        .subtitle {
+            margin-top: 4px;
+            line-height: 1.2em;
+            font-size: 1.1em;
+        }
+        footer, footer .section_blocks .footer_section {
+            font-size: 0.7em;
+        }
+        .source_details, .icon {
+            padding-top: 30px;
+            vertical-align: top
+
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="org_name">
+        {{ org_name }}
+    </div>
+    <svg id="OX_logo_top_right" class="ox_horns_header" xmlns="http://www.w3.org/2000/svg"
+         width="180px" height="70px"
+         viewBox="0 0 789 880">
+        {% include "pdf/resources/_ox_logo_path_horns_only.svg" %}
+    </svg>
+    
+</header>
+<div class="content">
+    <div class="framework">
+        <table>
+            {% for s in all_sources %}
+            <tr>
+                <td class="icon">
+                    <div class="link_icon">
+                        {% include "pdf/resources/_link_path.svg" %}
+                    </div>
+                </td>
+                <td class="source_details">
+                    <div class="name">{{s.name}}</div>
+                    <div class="subtitle">{{s.subtitle}}</div>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+<footer>
+    <div class="section_blocks">
+        <div class="footer_section first">
+            <div class="name">Overview</div>
+            <div class="bar"></div>
+        </div>
+        <div class="footer_section center">
+            <div class="name">Frameworks</div>
+            <div class="bar"></div>
+        </div>
+        <div class="footer_section center">
+            <div class="name">Scores</div>
+            <div class="bar"></div>
+        </div>
+        {# <div class="footer_section center active"> #}
+            {# <div class="name">Scorecards</div> #}
+            {# <div class="bar"></div> #}
+        {# </div> #}
+        <div class="footer_section {% if has_sources %}center{% else %}last{% endif %}">
+            <div class="name">Notes</div>
+            <div class="bar"></div>
+        </div>
+        {% if has_sources %}<div class="footer_section last active">
+            <div class="name">Sources</div>
+            <div class="bar"></div>
+        </div>{% endif %}
+    </div>
+</footer>
+
+</body>
+</html>

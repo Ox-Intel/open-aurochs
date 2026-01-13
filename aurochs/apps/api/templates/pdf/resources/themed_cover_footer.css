@@ -1,0 +1,72 @@
+<style type="text/css">
+        html {
+            background-color: #ffffff;
+        }
+        h1, h2, h3 {
+            color: #3b3a3a !important;
+        }
+
+        @page {
+            margin: 80px 20px 40px 20px;
+            background-color: #ffffff;
+            color: #FFF;
+        }
+
+        @page {
+            @bottom-center {
+                font-family: "acf", "Helvetica Neue", "Helvetica", "sans-serif";
+                color: #000;
+                font-weight: 400;
+                font-size: 1.1em;
+                content: "{{distribution_text|safe}}";
+                margin: -68px 0px 0px 0px;
+            }
+        }
+
+        @page {
+            @top-center {
+                font-family: "acf", "Helvetica Neue", "Helvetica", "sans-serif";
+                color: #000000;
+                font-weight: 400;
+                font-size: 1.1em;
+                content: "{{distribution_text|safe}}";
+                margin: 35px 0px 0px 0px;
+
+            }
+        }
+ /*       html {
+            background-color: #8E24FF;
+        }
+        h1, h2, h3 {
+            color: #ffffff !important;
+        }
+
+        @page {
+            margin: 80px 20px 40px 20px;
+            background-color: #8E24FF;
+            color: #FFF;
+        }
+
+
+        @page {
+            @bottom-center {
+                font-family: "acf", "Helvetica Neue", "Helvetica", "sans-serif";
+                color: #FFF;
+                content: "{{distribution_text|safe}}";
+                background-color: #8E24FF;
+                margin: -32px 0px 0px 0px;
+
+            }
+        }
+
+        @page {
+            @top-center {
+                font-family: "acf", "Helvetica Neue", "Helvetica", "sans-serif";
+                color: #fffcfc;
+                background-color: #8E24FF;
+                content: "{{distribution_text|safe}}";
+                margin: -40px 0px 0px 0px;
+
+            }
+        }*/
+</style>

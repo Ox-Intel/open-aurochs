@@ -1,0 +1,87 @@
+{% load aurochs_helpers %}
+<html>
+<head>
+    <title>{{ title }}</title>
+    {% include "pdf/resources/fonts.css" %}
+    {% include "pdf/resources/common.css" %}
+    <style type="text/css">
+        .notes, .notes p {
+            line-height: 1.5rem;
+        }
+        {% if distribution_text %}
+         @page {
+            @bottom-center {
+                font-family: "acf", "Helvetica Neue", "Helvetica", "sans-serif";
+                color: #000;
+                font-weight: 400;
+                font-size: 1.1em;
+                content: "{{distribution_text|safe}}";
+                margin: 45px 0px 0px 0px;
+            }
+        }
+        {% endif %}
+        img {
+            max-width: 95%;
+        }
+
+
+    </style>
+</head>
+<body>
+<header>
+    <div class="org_name">
+        {{ org_name }}
+    </div>
+    <svg id="OX_logo_top_right" class="ox_horns_header" xmlns="http://www.w3.org/2000/svg"
+         width="180px" height="70px"
+         viewBox="0 0 789 880">
+        {% include "pdf/resources/_ox_logo_path_horns_only.svg" %}
+    </svg>
+    
+</header>
+<div class="content">
+    {% if report.feedback_score is not None %}
+    <p><b>Outcome Score:</b> {{report.feedback_score|floatformat:0}}%</p>
+    {% endif %}
+    {% if feedback_comment %}
+    <h3>Outcome Notes:</h3>
+    {{feedback_comment}}
+    {% endif %}
+    {% if report.feedback_score or feedback_comment %}
+    <h3>Notes</h3>
+    {% endif %}
+    <div class="notes">
+        {{ notes }}
+    </div>
+</div>
+<footer>
+    <div class="section_blocks">
+        <div class="footer_section first">
+            <div class="name">Overview</div>
+            <div class="bar"></div>
+        </div>
+        <div class="footer_section center">
+            <div class="name">Frameworks</div>
+            <div class="bar"></div>
+        </div>
+        <div class="footer_section center">
+            <div class="name">Scores</div>
+            <div class="bar"></div>
+        </div>
+        {# <div class="footer_section center active"> #}
+            {# <div class="name">Scorecards</div> #}
+            {# <div class="bar"></div> #}
+        {# </div> #}
+        <div class="footer_section active {% if has_sources %}center{% else %}last{% endif %}">
+            <div class="name">Notes</div>
+            <div class="bar"></div>
+        </div>
+        {% if has_sources %}<div class="footer_section last">
+            <div class="name">Sources</div>
+            <div class="bar"></div>
+        </div>{% endif %}
+    </div>
+</footer>
+
+</body>
+</html>

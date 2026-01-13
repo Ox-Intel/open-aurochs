@@ -1,0 +1,6 @@
+{% load static %}{
+  "icons": [
+    { "src": "{{ request.scheme }}://{{ request.get_host }}{% static 'common/img/icon-192.png' %}", "type": "image/png", "sizes": "192x192" },
+    { "src": "{{ request.scheme }}://{{ request.get_host }}{% static 'common/img/icon-512.png' %}", "type": "image/png", "sizes": "512x512" }
+  ]
+}

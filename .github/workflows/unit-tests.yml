@@ -1,0 +1,27 @@
+name: Unit Tests
+
+on: [push]
+
+jobs:
+  unit-test:
+    name: unit-tests
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10",]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Setting up test db
+      run: |
+        mv Dockerfile.ci Dockerfile
+        mv Procfile.ci Procfile
+        cp env.ci .env
+        cp requirements.ci.txt requirements.txt
+        docker compose down && docker compose up db -d
+    - name: Running Unit tests
+      run: |
+        docker compose run -T aurochs bash -c "python manage.py test --settings=aurochs.envs.test"

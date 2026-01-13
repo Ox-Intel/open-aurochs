@@ -1,0 +1,297 @@
+<style type="text/css">
+    @page {
+        {% if distribution_text %}
+        margin: 85px 30px 117px 30px;
+        {% else %}
+        margin: 85px 30px 70px 30px;
+        {% endif %}
+    }
+    html {
+        font-family: "acf", "Helvetica Neue", "Helvetica", "sans-serif";
+        font-weight: 400;
+        font-style: normal;
+        font-size:  16px;
+        color:  #222;
+        /*line-height: 1.5em;*/
+    }
+    h1 {
+        font-size: 2.25em;
+        line-height: 1em;
+    }
+    h2 {
+        font-size: 1.5em;
+        font-weight: 700;
+    }
+    h3 {
+        font-size: 1.25em;
+    }
+    h1, h2, h3, b {
+        color:  #000;
+    }
+    .subtitle {
+        font-size: 1.2em;
+        line-height: 1.3em
+    }
+    .framework {
+        position: relative;
+    }
+    p {
+        line-height: 1.2rem;
+    }
+    header {
+        position: fixed;
+        display: block;
+        width: 106%;
+        top: -45px;
+        height: 60px;
+        left: -20px;
+    }
+    header #OX_logo_top_right {
+        position: fixed;
+        text-align: right;
+        right: -54px;
+        top: -45px;
+    }
+    header .org_name {
+        top: 0;
+        left: 0;
+        text-align: center;
+        position: absolute;
+        width: 100%;
+        text-transform: uppercase;
+    }
+    .ox_horns_header {
+        color: #000;
+        
+    }
+    .inline-donut {
+        display: inline-block;
+        width: 1em;
+        height: 1em;
+        vertical-align: middle;
+        margin-right: 4px;
+    }
+    img {
+        max-width: 95%;
+    }
+    footer {
+        position: fixed;
+        {% if distribution_text %}
+        bottom: -56px;
+        {% else %}
+        bottom: -70px;
+        {% endif %}
+        left: -40px;
+        width: 110%;
+        height: 50px;
+        border: 0;
+        font-size: 0.7em;
+        font-weight: 600;
+    }
+    footer .section_blocks {
+        width: 100%;
+        height: 50px;
+        border: 0;
+    }
+    footer .section_blocks .footer_section {
+        display: inline-block;
+        {% if has_sources %}
+        width: 19.4%;
+        {% else %}
+        width: 24.4%;
+        {% endif %}
+
+
+        padding-top: 5px;
+        height: 26px;
+        color: #adadad;
+        font-size: 0.7rem;
+        font-weight: 600;
+
+        text-align: center;
+        text-transform: uppercase;
+    }
+    footer .section_blocks .footer_section .bar {
+        background-color: #adadad;
+        width: 100%;
+        height: 8px;
+        margin-top: 8px;
+    }
+    footer .section_blocks .footer_section.active .bar {
+        background-color: #000;
+    }
+    footer .section_blocks .footer_section.center, footer .section_blocks .footer_section.first {
+        padding: 0 1px 0 0;
+    }
+    footer .section_blocks .footer_section.last .bar {
+        width: 104%;
+    }
+    footer .centered_footer_distribution {
+        width: 100%;
+        text-align: center;
+        margin-top: 16px;
+        font-size: 1.1em;
+        color: #000;
+    }
+    .noise .badge_container {
+        position: relative;
+        width: 100%;
+        text-align: center;
+        height: 30px;
+    }
+    .noise .badge {
+/*        position: absolute;*/
+/*        top: -2px;*/
+/*        left: 6px;*/
+        margin: 0 auto;
+        display: inline-block;
+        margin-top: 19px;
+        font-size: 0.6em;
+        text-transform: uppercase;
+        border-radius: 2em;
+        background-color: #EEE;
+        color: #646464;
+        padding: 6px 8px 4px 8px;
+/*        width: auto;*/
+        white-space: nowrap;
+    }
+    .noise .badge.high {
+        background-color: #ff531A;
+        color: #FFF;
+    }
+    .noise .badge.medium {
+        background-color: #CCC;
+        color: #333;
+    }
+    .avatar {
+        display: inline-block;
+        border-radius: 9999px;
+        background-color: #888;
+        padding: 4px 6px;
+        font-size: 10px;
+        color: #FFF;
+    }
+    .report_avatar {
+        font-weight: bold;
+        font-size: 10px;
+        color: #FFF;
+        border-radius: 4px;
+        padding: 4px;
+        margin-top: 16px;
+        width: 12px;
+        text-align: center;
+    }
+    .inline_block {
+        display: inline-block;
+    }
+    .dot_plot {
+        display: block;
+        position: absolute;
+        width: 100%;
+        min-height: 50px;
+        vertical-align: bottom;
+        bottom: 0;
+    }
+    .dot_plot .line {
+        z-index: 1;
+        width: 100%;
+        height: 1px;
+        position: absolute;
+        top: 18px;
+        background-color: #CCC;
+    }
+    .dot_plot .average_line {
+        z-index: 2;
+        width: 1px;
+        height: 30px;
+        margin-left: -11px;
+        position: absolute;
+        top: 2px;
+        background-color: #8E24FF;   
+    }
+    .dot_plot .dot {
+        position: absolute;
+        top: 10px;
+        border-radius: 9999px;
+        background: #777;
+        color: #FFF;
+        width: 10px;
+        height: 10px;
+        text-align: center;
+        margin-left: -20px;
+        padding: 4px;
+        font-size: 11px;
+        font-weight: 700;
+        z-index: 10;
+    }
+    .report_plot {
+        display: block;
+/*        position: absolute;*/
+        width: 100%;
+        min-height: 50px;
+        vertical-align: bottom;
+        bottom: 0;
+    }
+    .report_plot .line {
+        z-index: 1;
+        width: 100%;
+        height: 1px;
+        position: absolute;
+        top: 18px;
+        background-color: #CCC;
+    }
+    .report_plot .average_line {
+        z-index: 2;
+        width: 1px;
+        height: 30px;
+        margin-left: -11px;
+        position: absolute;
+        top: 2px;
+        background-color: #8E24FF;   
+    }
+    .report_plot .dot {
+        position: absolute;
+        top: 10px;
+        border-radius: 4px;
+        background: #777;
+        color: #FFF;
+        width: 20px;
+        height: 10px;
+        text-align: center;
+        margin-left: -20px;
+        padding: 6px 0px;
+
+        font-size: 10px;
+        font-weight: 700;
+        z-index: 10;
+    }
+    .no_scores {
+        display: block;
+        width: 100%;
+        color: #AAA;
+        text-align: center;
+        font-size: 0.8em;
+        height: 30px;
+        vertical-align: middle;
+    }
+    .no_scores.absolute {
+        bottom: 4px;
+        position: absolute;
+    }
+    .report_heading .average_ox_score {
+        width: 120px;
+    }
+    .report_heading {
+        width: 100%;
+        padding-bottom: 20px;
+    }
+
+    .framework_heading .average_ox_score {
+        width: 60px;
+    }
+    .framework_heading {
+        width: 100%;
+        padding-bottom: 20px;
+    }
+</style>
+{% include "pdf/resources/ox_score.css" %}

@@ -1,0 +1,16 @@
+<style type="text/css">
+@page {
+    @bottom-left{
+        font-family: "acf", "Helvetica Neue", "Helvetica", "sans-serif";
+        color:  #999;
+        content: "{{ title|safe }}";
+    }
+}
+@page {
+    @bottom-right{
+        font-family: "acf", "Helvetica Neue", "Helvetica", "sans-serif";
+        color:  #999;
+        content: "{{ org_name|safe }}";
+    }
+}
+</style>

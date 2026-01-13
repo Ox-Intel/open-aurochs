@@ -1,0 +1,29 @@
+html {
+  @apply h-full bg-slate-900;
+}
+
+body {
+  @apply h-full;
+}
+
+#ox-login-logo {
+  @apply my-4;
+  svg {
+    @apply w-20;
+  }
+}
+
+#login-form > label {
+  @apply sr-only;
+}
+
+.ox-login-input {
+  @apply appearance-none relative block w-full px-3 py-2 my-3 border border-gray-300 placeholder-gray-500 text-gray-900  focus:outline-none focus:ring-sky-500 focus:border-sky-500 focus:z-10 sm:text-sm;
+}
+.ox-submit-button {
+  @apply appearance-none relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-sky-400 hover:bg-sky-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 disabled:opacity-75 disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200;
+}
+
+.ox-login-label {
+  @apply hidden;
+}

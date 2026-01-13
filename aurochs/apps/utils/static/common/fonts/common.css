@@ -1,0 +1,198 @@
+<style type="text/css">
+    html {
+        font-family: "acf", "Helvetica Neue", "Helvetica", "sans-serif";
+        font-weight: 400;
+        font-style: normal;
+        font-size:  16px;
+        color:  #222;
+        /*line-height: 1.5em;*/
+    }
+    h1, h2, h3 {
+        font-family: "acf", "Helvetica Neue", "Helvetica", "sans-serif";
+        color:  #000;
+    }
+    b {
+        font-family: "acf", "Helvetica Neue", "Helvetica", "sans-serif";
+    }
+    i {
+        font-family: "acf", "Helvetica Neue", "Helvetica", "sans-serif";
+    }
+    header {
+        position: fixed;
+        top: -100px;
+        
+    }
+    header h1 {
+        left:  0;
+        margin-bottom:  4px;
+        margin:  0 0 4px 0;
+    
+    }
+    header h2 {
+        margin:  4px 0 0 0;
+        /*opacity:  0.6;*/
+    
+    }
+    header #OX_logo_top_right {
+        position: fixed;
+        text-align: right;
+        right: 0;
+    }
+
+    @page {
+        margin: 130px 20px 40px 20px;
+    }    
+    /*If we want page numbers in the future:*/
+/*
+    @page {
+        @bottom-left{
+            font-family: "acf", "Helvetica Neue", "Helvetica", "sans-serif";
+            color:  #999;
+            content: "Page " counter(page) " of " counter(pages);
+        }
+    }
+*/
+    @page {
+        @bottom-right{
+            font-family: "acf", "Helvetica Neue", "Helvetica", "sans-serif";
+            color:  #999;
+            content: "{{organization.name}}";
+        }
+    }
+    .avoid_break {
+        break-inside: avoid;
+    }
+    .report_header {
+        margin-top: -20px;
+    }
+    .report_created {
+        display: inline-block;
+        font-family: "acf", "Helvetica Neue", "Helvetica", "sans-serif";
+        font-family: "acf", "Helvetica Neue", "Helvetica", "sans-serif";
+        color:  #999;
+    }
+    .report_scores {
+        padding: 30px 0;
+        margin-bottom:  10px;
+    }
+    
+
+    .feedback_score {
+        display: inline-block;
+        padding: 7px 10px;
+        color: #8E24FF;
+        font-family: "acf", "Helvetica Neue", "Helvetica", "sans-serif";
+        font-family: "acf", "Helvetica Neue", "Helvetica", "sans-serif";
+    }
+    .summary_section {
+        /*border: 1px solid #333;*/
+        /*padding: 10px;*/
+        margin-bottom:  10px;
+        font-size:  16px;
+    }
+    .summary_section .summary_header {
+        margin-bottom: 4px;
+    }
+    .summary_section .summary_header, .summary_pre_header {
+        font-family: "acf", "Helvetica Neue", "Helvetica", "sans-serif";
+        font-family: "acf", "Helvetica Neue", "Helvetica", "sans-serif";
+        font-size:  22px;
+    }
+    .summary_pre_header {
+        margin-top: 50px;
+        margin-bottom:  6px;
+        font-size:  22px;
+    }
+    .summary_section .summary_detail {
+        margin:  0 0 10px 0;
+        font-size:  16px;
+    }
+    .prose_text {
+        line-height:  1.25em;
+    }
+    .report_frameworks .framework_summary {
+        margin: 6px 0 20px 0;
+    }
+    .report_frameworks .framework_summary, .report_scorecards .scorecard_summary {
+        display: flex;
+    }
+    .report_frameworks .framework_graph, .report_scorecards .scorecard_summary .scorecard_graph {
+        flex: 0 0 30px;
+        display: block;
+    }
+    .report_frameworks .framework_details, .report_scorecards .scorecard_summary .scorecard_details {
+        display: block;
+        flex:  auto;
+        text-align: left;
+        font-size:  16px;
+    }
+    .report_scorecards .scorecard_graph img {
+        width:  30px;
+    } 
+    .report_frameworks .framework_details .framework_date, .framework_date {
+        color:  #999;
+    }
+    .framework_name {
+        font-family: "acf", "Helvetica Neue", "Helvetica", "sans-serif";
+        font-family: "acf", "Helvetica Neue", "Helvetica", "sans-serif";
+        font-family: "acf", "Helvetica Neue", "Helvetica", "sans-serif";
+        color:  #08192c;
+        font-size:  1.2em;
+    }   
+    .report_frameworks .framework_details .framework_name {
+        font-family: "acf", "Helvetica Neue", "Helvetica", "sans-serif";
+        font-family: "acf", "Helvetica Neue", "Helvetica", "sans-serif";
+        font-family: "acf", "Helvetica Neue", "Helvetica", "sans-serif";
+        font-size:  20px;
+        margin-bottom:  6px;
+    }
+    .report_frameworks .framework_details .framework_description {
+        margin:  2px 0 6px 0;
+    }
+    .summary_section .scorecard {
+        margin: 20px 0;
+    }
+    .scorecard_name {
+        display: block;
+        width: 100%;
+        font-family: "acf", "Helvetica Neue", "Helvetica", "sans-serif";
+        font-family: "acf", "Helvetica Neue", "Helvetica", "sans-serif";
+        font-size:  18px;
+        margin:  2px 0 -6px 12px;
+    }
+    .report_scorecards .scorecard_summary {
+        padding:  10px;
+    }
+    .report_scorecards .scorecard_summary .scorecard_graph {
+        
+    }
+    .report_scorecards .scorecard_summary .scorecard_framework_name {
+        text-align: left;
+        
+    }
+
+    .scorecard {
+        display: flex;
+    }
+    .scorecard .scorecard_score {
+        flex: 0 0 80px;
+        display: block;
+    }
+    .scorecard .scorecard_body {
+        display: block;
+        flex:  auto;
+        text-align: left;
+        font-size:  16px;
+    }
+    .errorlist {
+        color:  #FFF;
+    }
+    html[data-theme=dark] .dark-hidden {
+        display: none;
+    }
+    html[data-theme^=dark] .light-hidden {
+        display: none;
+    }
+</style>
+{% include "pdf/resources/ox_score.css" %}
+{% include "pdf/resources/org_footer.css" %}

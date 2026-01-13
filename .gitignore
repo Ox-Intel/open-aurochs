@@ -1,0 +1,75 @@
+*.pyc
+.DS_Store
+project.db
+__pycache__
+*.sqlite3
+*.sublime-workspace
+*.sublime-project
+collected_static
+node_modules
+source
+
+# Environment files (keep env.sample as template)
+.env
+env.*
+!env.sample
+
+# Packages #
+############
+# it's better to unpack these files and commit the raw source
+# git has its own built in compression methods
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+# *.zip
+*.dump
+
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+.unison.*
+
+# Aurochs
+celerybeat-schedule*
+celerybeat*
+dump.rdb
+
+aurochs/project/db.sqlite3-journal
+aurochs/celerybeat.pid
+aurochs/celerybeat-schedule.db
+aurochs/media
+aurochs/project/project
+aurochs/project/media/*
+aurochs/data.json
+aurochs/npm-debug.log
+
+postgres-data/*
+aurochs/apps/utils/management/commands/add_bundles.py
+aurochs/apps/webapp/static/compiled/*
+aurochs/apps/public/static/compiled/*
+aurochs/apps/public/static/compiled-public/*
+*.sql
+cypress/screenshots/*
+
+# Client build
+aurochs/apps/webapp/static/compiled/*
+
+.vscode/*
+cypress/videos/*
+*.diff.png
+*.1
+
+# Yarn - FontAwesome Pro packages (requires license)
+aurochs/apps/webapp/.yarn/cache/@fortawesome*
+aurochs/apps/webapp/.yarn/unplugged/@fortawesome*
+CLAUDE.md

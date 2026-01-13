@@ -1,0 +1,128 @@
+{
+  "name": "ox-aurochs",
+  "version": "0.0.2",
+  "engines": {
+    "node": "18.x"
+  },
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "GENERATE_SOURCEMAP=false vue-cli-service build",
+    "build-with-sourcemap": "vue-cli-service build",
+    "lint": "vue-cli-service lint src --ext .js,.vue",
+    "dev": "vue-cli-service build --mode development",
+    "watch": "vue-cli-service build --watch",
+    "prettier-check": "prettier --check src",
+    "prettier-write": "prettier -w src",
+    "cleanup": "vue-cli-service lint src --ext .js,.vue && prettier -w src"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-pro": "^6.4.0",
+    "@fortawesome/fontawesome-svg-core": "^6.4.0",
+    "@fortawesome/pro-duotone-svg-icons": "^6.4.0",
+    "@fortawesome/pro-light-svg-icons": "^6.4.0",
+    "@fortawesome/pro-regular-svg-icons": "^6.4.0",
+    "@fortawesome/pro-solid-svg-icons": "^6.4.0",
+    "@fortawesome/pro-thin-svg-icons": "^6.4.0",
+    "@fortawesome/vue-fontawesome": "^3.0.2",
+    "@headlessui/vue": "^1.7.4",
+    "@tailwindcss/forms": "^0.5.3",
+    "@tailwindcss/typography": "^0.5.8",
+    "@vue/cli": "^5.0.8",
+    "@vuelidate/core": "^2.0.0",
+    "@vuelidate/validators": "^2.0.0",
+    "@vueup/vue-quill": "1.0.0",
+    "ajv": "^8.12.0",
+    "autoprefixer": "^10.4.13",
+    "axios": "^1.7.8",
+    "click-outside-vue3": "^4.0.1",
+    "core-js": "^3.27.1",
+    "daisyui": "^4.0.0",
+    "dompurify": "^3.2.4",
+    "html-to-image": "^1.11.4",
+    "json5": "^2.2.3",
+    "lodash": "^4.17.21",
+    "mitt": "^3.0.0",
+    "pinia": "^2.1.3",
+    "platform-detect": "^3.0.1",
+    "postcss": "^8.5.0",
+    "postcss-import": "^14.1.0",
+    "postcss-nested": "^5.0.6",
+    "primevue": "^3.32.2",
+    "quill": "^1.3.7",
+    "quill-blot-formatter": "^1.0.5",
+    "quill-image-uploader": "^1.2.3",
+    "quill-markdown-shortcuts": "^0.0.10",
+    "regenerator-runtime": "^0.13.11",
+    "rollbar": "^2.26.0",
+    "tailwind": "^4.0.0",
+    "tailwindcss": "^3.4.15",
+    "terser": "5.17.7",
+    "vue": "^3.5.14",
+    "vue-cli": "^2.9.6",
+    "vue-router": "^4.1.6",
+    "vue-simple-websocket": "^1.0.0",
+    "vue3-shortkey": "^4.0.0",
+    "ws": "^8.11.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.12",
+    "@babel/eslint-parser": "^7.19.1",
+    "@vue/cli-plugin-babel": "^5.0.8",
+    "@vue/cli-plugin-eslint": "^5.0.8",
+    "@vue/cli-service": "^5.0.8",
+    "@vue/compiler-sfc": "^3.2.45",
+    "babel-eslint": "^10.1.0",
+    "chance": "^1.1.9",
+    "cypress": "^10.11.0",
+    "eslint": "^8.31.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-plugin-vue": "^9.8.0",
+    "prettier": "^2.8.1",
+    "webpack": "5.76.0",
+    "webpack-bundle-analyzer": "^4.7.0",
+    "webpack-cli": "^4.10.0"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/vue3-essential",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "parser": "@babel/eslint-parser"
+    },
+    "rules": {
+      "no-unused-vars": [
+        "warn",
+        {
+          "vars": "all",
+          "args": "after-used",
+          "ignoreRestSiblings": false
+        }
+      ],
+      "vue/no-unused-components": [
+        "warn"
+      ],
+      "vue/no-v-html": [
+        "warn"
+      ]
+    }
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "packageManager": "yarn@3.2.3"
+}

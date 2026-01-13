@@ -1,0 +1,60 @@
+FROM node:18.12-slim AS js_build
+ADD aurochs /project/aurochs
+ADD bin /project/bin
+
+WORKDIR /project
+
+RUN ./bin/prep_airgapped.sh
+RUN ./bin/build_js_apps.sh
+
+FROM python:3.12.7-slim-bullseye AS base
+
+FROM base AS compile-python
+
+WORKDIR /project
+RUN apt-get update
+RUN apt-get install -y --no-install-recommends build-essential gcc
+RUN apt-get -y install tzdata curl npm libpq-dev python3-cffi python3-brotli libpango-1.0-0 libharfbuzz0b libpangoft2-1.0-0
+
+RUN python -m venv /opt/venv
+
+# set path to use venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+ADD requirements.airgapped.txt /project/requirements.txt
+RUN pip install -r /project/requirements.txt
+
+COPY --from=js_build /project/aurochs ./aurochs
+ADD bin /project/bin
+
+ADD env.airgapped /project/.env
+ADD manage.py /project/manage.py
+RUN export $(grep -v '^#' /project/.env | xargs -d '\n') && /project/bin/build_and_cleanup.sh
+RUN export $(grep -v '^#' /project/.env | xargs -d '\n') && /project/bin/cleanup_airgapped.sh
+
+FROM base
+WORKDIR /project
+
+# copy venv from compile-python
+COPY --from=compile-python /opt/venv /opt/venv
+COPY --from=compile-python  /project/aurochs ./aurochs
+
+# set path to use venv from compile-python
+ENV PATH="/opt/venv/bin:$PATH"
+
+# Add script files
+ADD bin /project/bin
+ADD manage.py /project/manage.py
+RUN /project/bin/docker-install.sh
+
+
+
+RUN ln -fs /usr/share/zoneinfo/UTC /etc/localtime; dpkg-reconfigure --frontend noninteractive tzdata
+
+# Add procfile (for honcho)
+ADD Procfile.prod /project/Procfile
+ADD manage.py /project/manage.py
+
+# Set the environment vars and start the server
+CMD export $(grep -v '^#' /project/.env | xargs -d '\n') && honcho start -f Procfile
+

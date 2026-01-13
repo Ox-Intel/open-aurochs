@@ -1,0 +1,33 @@
+name: Tests and Code Quality
+
+on: [push]
+
+jobs:
+  code-quality:
+    name: code-quality
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10",]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install flake8 black
+    - name: Analysing the code with flake8
+      run: |
+        flake8
+    - name: Analysing the code with black
+      run: |
+        black --check aurochs
+    - name: Linting and prettiering the webapp codebase
+      run: |
+        cd aurochs/apps/webapp
+        yarn
+        yarn lint
+        yarn prettier-check

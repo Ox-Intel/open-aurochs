@@ -1,0 +1,44 @@
+{
+  "name": "Aurochs",
+  "description": "The core of Ox",
+  "keywords": ["decison making"],
+  "website": "https://app.oxintel.ai/",
+  "repository": "https://github.com/ox-intel/aurochs",
+  "logo": "https://app.oxintel.ai/",
+  "success_url": "/",
+  "scripts": {
+    "release": "python manage.py migrate && python manage.py collectstatic --noinput && python manage.py clear_cache && python manage.py warm_cache"
+  },
+  "env": {
+    "WEB_CONCURRENCY": {
+      "description": "The number of processes to run.",
+      "value": "1"
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "hobby"
+    },
+    "worker": {
+      "quantity": 1,
+      "size": "hobby"
+    }
+  },
+  "addons": ["heroku-redis", "heroku-postgresql"],
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    },
+    {
+      "url": "heroku/python"
+    }
+  ],
+  "environments": {
+    "test": {
+      "scripts": {
+        "test": "python manage.py test"
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+python:
+    command: DISABLE_ENCRYPTION_FOR_TESTS=True python3 manage.py test --noinput
+    watch_glob: "*.py"
+    watch_dir: aurochs
+flake:
+    command: flake8
+    watch_glob: "*.py"
+    watch_dir: .
+black:
+    command: black --check aurochs manage.py
+# newman:
+#     command: newman run postman/ox-integration-test.postman_collection.json -e postman/ox-localhost.postman_environment.json

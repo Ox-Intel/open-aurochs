@@ -1,0 +1,12 @@
+
+#dev artifacts
+cypress
+postman
+tests
+
+__pycache__
+*.pyc
+.git
+.github
+
+

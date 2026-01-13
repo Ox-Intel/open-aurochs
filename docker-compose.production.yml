@@ -1,0 +1,95 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:13.6
+    restart: always
+    env_file:
+      - ".env.production"
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB:-aurochs}
+      - POSTGRES_USER=${POSTGRES_USER:-aurochs}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - aurochs_network
+
+  redis:
+    image: redis:6.0-alpine
+    restart: always
+    command: redis-server --maxmemory 256mb --maxmemory-policy allkeys-lru
+    volumes:
+      - redis_data:/data
+    networks:
+      - aurochs_network
+
+  web:
+    build: .
+    restart: always
+    depends_on:
+      - db
+      - redis
+    env_file:
+      - ".env.production"
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-aurochs}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-aurochs}
+      - REDIS_URL=redis://redis:6379/0
+      - ENV=production
+    command: >
+      bash -c "
+        python manage.py migrate &&
+        python manage.py collectstatic --noinput &&
+        uvicorn aurochs.asgi:application --host 0.0.0.0 --port 8000 --workers 4
+      "
+    volumes:
+      - static_volume:/project/aurochs/collected_static
+      - media_volume:/project/media
+    ports:
+      - "8000:8000"
+    networks:
+      - aurochs_network
+
+  celery:
+    build: .
+    restart: always
+    depends_on:
+      - db
+      - redis
+    env_file:
+      - ".env.production"
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-aurochs}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-aurochs}
+      - REDIS_URL=redis://redis:6379/0
+      - ENV=production
+    command: celery --app aurochs worker --beat -c 2 -Q celery
+    volumes:
+      - media_volume:/project/media
+    networks:
+      - aurochs_network
+
+  # Optional: Nginx for serving static files and as reverse proxy
+  nginx:
+    image: nginx:alpine
+    restart: always
+    depends_on:
+      - web
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - static_volume:/static:ro
+      - media_volume:/media:ro
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - aurochs_network
+
+volumes:
+  postgres_data:
+  redis_data:
+  static_volume:
+  media_volume:
+
+networks:
+  aurochs_network:
+    driver: bridge

@@ -1,0 +1,60 @@
+{% extends "common/login_base.html" %}{% load static aurochs_helpers  compile_static %}
+
+{% block title %}Log in to Ox.{% endblock %}
+{% block description %}Login to Ox.{% endblock %}
+
+{% block nav %}{% endblock %}
+{% block js %}{{block.super}}
+<script>
+  window.handleSignIn = function() {
+    var ele = document.getElementById("id_submit");
+    ele.disabled = true;
+  }
+</script>
+{% endblock %}
+
+{% block content %}
+  <div class="flex place-content-center justify-center " data-cy="login-form"  id="oxapp">
+    <div class="w-auto">
+      <div id="ox-login-logo" class="text-white mx-auto w-48 ">
+        <div class="logo text-center">
+          {% include "accounts/_logo.html" %}
+        </div>
+      </div>
+      <div class="mt-6 text-white text-center text-2xl font-extrabold">Sign in:</div>
+      <form class="w-48 mx-auto" action="." method="POST" onSubmit="handleSignIn()">
+        <input type="hidden" name="remember" value="true">
+        <div class="rounded-md shadow-sm -space-y-px">
+          {% csrf_token %}
+          {{form.as_p}}
+
+          {% if request.GET.next %}
+          <input type="hidden" name="next" value="{{ request.GET.next }}" />
+          {% endif %}
+        </div>
+  
+        <div class="text-center mx-auto">
+          <div class="flex mt-2">
+            <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 text-sky-300 focus:ring-sky-200 border-slate-300 rounded">
+            <label for="remember-me" class="ml-2 block text-sm text-slate-100"> Remember me </label>
+          </div>
+        </div>
+
+  
+        <div class="my-4 mx-auto">
+          <input type="submit" id="id_submit" class="btn btn-primary w-48 checkbox" value="Sign in"></input>
+        </div>
+      </form>
+
+      <div class="text-sm mt-8 mx-auto w-80 text-center text-base-300">
+         {% if AIRGAPPED %}
+        Need to reset your password? <br/> Contact
+          your system administrator for assistance.
+        {% else %}
+          <a href="{% url 'password_reset' %}" class="font-medium font-normal text-slate-200 underline"> Forgot your password? </a>
+        {% endif %}
+        
+      </div>
+    </div>
+  </div>
+{% endblock %}

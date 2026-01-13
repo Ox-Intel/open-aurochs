@@ -1,0 +1,296 @@
+{% load aurochs_helpers %}
+<html>
+<head>
+    <title>{{ title }}</title>
+    {% include "pdf/resources/fonts.css" %}
+    {% include "pdf/resources/common.css" %}
+    <style type="text/css">
+        h1 {
+            margin-bottom: 0;
+        }
+        .hero_donut {
+            width: 260px;
+            height: 260px;
+            margin: 20px auto;
+        }
+
+        .framework {
+/*            page-break-before:always;*/
+            margin-top: 20px;
+            clear: both;
+            position: relative;
+            display: block;
+        }
+        .framework h2 {
+            position: relative;
+            display: block;
+            margin-top: 0;
+        }
+        .framework h2 .h2_content {
+            width: 100%;
+            padding: 20px 0 0 0;
+            display: block;
+            clear: both;
+            vertical-align: middle
+        }
+        .framework h2 .h2_content .inline-donut {
+            padding-bottom: 4px;
+        }
+        .importance_label {
+            font-size: 0.8em;
+            font-style: italic;
+            padding: 4px 0 8px 0;
+            text-align: center;
+        }
+        .criteria_circle {
+            border-radius: 9999px;
+            color: #FFF;
+            font-weight: bold;
+
+        }
+        .criteria_list {
+            margin-top: 40px;
+        }
+        .criteria_list .criteria .circle_cell {
+            padding-right: 2px;
+            vertical-align: top;
+        }
+        .criteria_list .criteria .name {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 6px;
+            vertical-align: middle;
+            
+        }
+        .criteria_list .criteria .criteria_circle {
+            text-align: center;
+            font-weight: 700;
+            display: block;
+
+        }
+        .criteria_bar {
+            width: 100%;
+            position: relative;
+            height: 20px;
+        }
+        .criteria {
+            vertical-align: bottom;
+        }
+        .criteria_bars, .criteria_list {
+            page-break-inside: avoid;
+        }
+        .criteria_bars h3 {
+            margin-bottom: 2px;
+            font-size: 1em;
+        }
+        .criteria_bar .inner, .criteria_bar .outer {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 20px;
+        }
+        .criteria_bar .inner {
+            display: block;
+            height: 20px;
+            z-index: 3;
+        }
+        .criteria_bar .outer {
+            display: block;
+            position: relative;
+            opacity: 0.3;
+            z-index: 2;
+        }
+        .criteria_list {
+            width: 100%;
+        }
+        .criteria_list .circle_cell {
+            width: 8%;
+            min-height: 50px;
+        }
+        .criteria_list  .dot_plot_container {
+            position: relative;
+            height: 100%;
+            vertical-align: bottom;
+            margin: 0 auto;
+            margin-bottom: -4px;
+        }
+        .criteria_list .description_cell {
+            vertical-align: middle;
+            width: 35%;
+            font-size: 1em;
+            padding: 0;
+        }
+        .criteria_list .description_cell .name {
+            display: block;
+            vertical-align: middle;
+            height: 100%;
+            margin: 0;
+            padding-bottom: 6px;
+        }
+        .criteria_list .scores {
+            width: 40%;
+            padding-bottom: 11px;
+            vertical-align: bottom;
+        }
+        .criteria_list .noise {
+            width: 10%;
+            padding-left: 4px;
+            padding-bottom: 12px;
+            text-align: center;
+            vertical-align: bottom;
+        }
+        .criteria_list .noise .badge_container {
+            margin: 0 auto 26px auto;
+        }
+       
+        .chart_label {
+            font-size: 0.8em;
+            text-align: center;
+        }
+        .chart_label.left {
+            text-align: left;
+        }
+        .average_ox_score {
+            margin-top: 10px;
+        }
+        .ox_score_with_horns {
+            margin-right: 5px;
+        }
+        {% if distribution_text %}
+         @page {
+            @bottom-center {
+                font-family: "acf", "Helvetica Neue", "Helvetica", "sans-serif";
+                color: #000;
+                font-weight: 400;
+                font-size: 1.1em;
+                content: "{{distribution_text|safe}}";
+                margin: 45px 0px 0px 0px;
+            }
+        }
+        {% endif %}
+
+    </style>
+</head>
+<body>
+<header>
+    <div class="org_name">
+        {{ org_name }}
+    </div>
+    <svg id="OX_logo_top_right" class="ox_horns_header" xmlns="http://www.w3.org/2000/svg"
+         width="180px" height="70px"
+         viewBox="0 0 789 880">
+        {% include "pdf/resources/_ox_logo_path_horns_only.svg" %}
+    </svg>
+    
+</header>
+<div class="content">
+    <div class="report overview">
+        <table class="report_heading">
+            <tr>
+                <td class="name">
+                    <h1>{{ report.name }}</h1>
+                    <div class="subtitle">{{ report.subtitle }}</div>        
+                </td>
+                <td class="average_ox_score">
+                    <div class="report_scores" style="float: right;">
+                        <div class="ox_score small">
+                            <div class="score">{{ report.ox_score|floatformat:0 }}</div>
+                            <div class="percent">%</div>
+                            <div class="label">Average Ox Score</div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        
+        {% for f in report.frameworks %}
+        <div class="framework">
+            <div class="ox_score_with_horns">
+                <svg class="horns" viewBox="0 0 789 880">{% include "pdf/resources/_ox_logo_path_horns_only_white.svg" %}</svg>
+                <div class="score">{% framework_report_ox_score f report  %}</div>
+                {% if f.has_skipped  %}
+                <div class="star">*</div>
+                {% endif %}
+            </div>
+            <h2>
+                <div class="h2_content">
+                    <span class="inline-donut">{% render_donut_chart f %}</span> {{ f.name }}
+                </div>
+            </h2>
+        
+            <div class="criteria_bars">
+            {% for c in f.criteria %}
+            <h3>{{c.name}}</h3>
+            <div class="criteria_bar">
+                <div class="inner" style="background-color: {% criteria_color c.index %}; width: {{ scores_by_criteria|get_item:c.ox_id|get_item:"average"|multiply:c.weight }}%; z-index: 3;"></div>
+                <div class="outer" style="background-color: {% criteria_color c.index %}; width: {{c.weight|multiply:10}}%; opacity: 0.3; z-index: 2"></div>
+            </div>
+            
+            {% endfor %}
+            </div>
+            <table class="criteria_list">
+                <tr>
+                    <td class="chart_label left" colspan="2">Importance</td>
+                    <td class="chart_label">Scores</td>
+                    <td class="chart_label">Noise</td>
+                </tr>
+                {% for c in f.criteria %}
+                <tr class="criteria">
+                    <td class="circle_cell">
+                        <div class="criteria_circle" style="background-color: {% criteria_color c.index %}; {% weight_circle_css c %}"> 
+                            <span >{{c.weight|floatformat:0 }}</span>
+                        </div>
+                
+                  {# c.weight >= 10 ? 'padding-right: 20px;padding-left: 20px; margin-right:2px;' : '' #}
+
+                    </td>
+                    <td class="description_cell">
+                        <div class="name">{{ c.name }}</div>
+                        {# <div class="description">{{ c.description|linebreaksbr }}</div> #}
+                    </td>
+                    <td class="scores">
+                        <div class="dot_plot_container" style="height: {% max_stack_offset scores_by_criteria|get_item:c.ox_id %}px; vertical-align: bottom">
+                        {% dot_plot_initial scores_by_criteria|get_item:c.ox_id %}
+                        </div>
+                    </td>
+                    <td class="noise">
+                        {% noise_badge scores_by_criteria|get_item:c.ox_id|get_item:'stddev' %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% endfor %}        
+    </div>
+</div>
+<footer>
+    <div class="section_blocks">
+        <div class="footer_section first active">
+            <div class="name">Overview</div>
+            <div class="bar"></div>
+        </div>
+        <div class="footer_section center">
+            <div class="name">Frameworks</div>
+            <div class="bar"></div>
+        </div>
+        <div class="footer_section center">
+            <div class="name">Scores</div>
+            <div class="bar"></div>
+        </div>
+        {# <div class="footer_section center active"> #}
+            {# <div class="name">Scorecards</div> #}
+            {# <div class="bar"></div> #}
+        {# </div> #}
+        <div class="footer_section {% if has_sources %}center{% else %}last{% endif %}">
+            <div class="name">Notes</div>
+            <div class="bar"></div>
+        </div>
+        {% if has_sources %}<div class="footer_section last">
+            <div class="name">Sources</div>
+            <div class="bar"></div>
+        </div>{% endif %}
+    </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,63 @@
+{% extends "google_meta.html" %}{% load static %} 
+    {% block meta %}{{block.super}}
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>{% block title %}{{ title }}{% endblock %}</title>
+    {% block favicon %}
+    <link
+      rel="icon"
+      type="image/ico"
+      href="{{ request.scheme }}://{{ request.get_host }}{% static 'common/img/favicon.ico' %}"
+      sizes="32x32"
+    />
+    <link
+      rel="icon"
+      type="image/ico"
+      href="{{ request.scheme }}://{{ request.get_host }}{% static 'common/img/favicon.ico' %}"
+      sizes="16x16"
+    />
+    <link rel="icon" href="{{ request.scheme }}://{{ request.get_host }}{% static 'common/img/favicon.ico' %}" sizes="any"><!-- 32×32 -->
+    <link rel="icon" href="{{ request.scheme }}://{{ request.get_host }}{% static 'common/img/icon.svg' %}" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="{{ request.scheme }}://{{ request.get_host }}{% static 'common/img/apple-touch-icon.png' %}"><!-- 180×180 -->
+    {# <link rel="manifest" href="{{ request.scheme }}://{{ request.get_host }}{% static 'common/img/manifest.webmanifest.html' %}"> #}
+    {# <link rel="apple-touch-icon" href="{{ request.scheme }}://{{ request.get_host }}{% static 'icons/apple-touch-icon.png' %}" /> #}
+    {% endblock %}
+    {% block preload %}
+    <link
+      href="{{ request.scheme }}://{{ request.get_host }}{% static 'compiled/js/common.js' %}"
+      rel="preload"
+      as="script"
+    />
+    <link
+      href="{{ request.scheme }}://{{ request.get_host }}{% static 'compiled/css/common.css' %}"
+      rel="preload"
+      as="style"
+    />
+    {% endblock %}
+
+    {% endblock %} 
+    {% block post_meta %}{% block css %}
+    <link href="{{ request.scheme }}://{{ request.get_host }}{% static 'compiled/css/common.css' %}" rel="stylesheet" />
+    {% include "common/fonts.css" %}
+    {% endblock %} {% block extra_head %}{% endblock %} {% block head_js %}
+    <script>
+      window.aurochs = window.aurochs || {};
+      window.aurochs.site_data;
+    </script>
+    {# <script src="https://kit.fontawesome.com/9af09a1df5.js" crossorigin="anonymous"></script> #}
+    {% endblock %}
+    
+  </head>
+
+  <body {% block body_extra %}{% endblock %}>
+    {% block body %} 
+      {% block nav %}{% endblock %} 
+      {% block content %}{% endblock content %} 
+      {% block footer %}{% endblock %} 
+    {% endblock body %} 
+    {% block js %}
+     <script src="{{ request.scheme }}://{{ request.get_host }}{% static 'compiled/js/common.js' %}"></script>
+    {% endblock %}
+  </body>
+{% endblock %}

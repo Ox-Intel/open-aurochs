@@ -1,0 +1,58 @@
+FROM node:18.12-slim AS js_build
+ADD aurochs /project/aurochs
+ADD bin /project/bin
+
+WORKDIR /project
+
+RUN  ./bin/build_js_apps.sh
+RUN  ./bin/build_public_apps.sh
+
+FROM python:3.12.7-slim
+MAINTAINER Steven Skoczen <steven@oxintel.ai>
+
+# Add files
+ADD bin /project/bin
+
+WORKDIR /project
+
+COPY --from=js_build /project/aurochs ./aurochs
+
+
+# Install the image os dependencies
+RUN /project/bin/docker-install.sh
+
+RUN export DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install -y \
+    tzdata \
+    curl \
+    npm \
+    libpq-dev \
+    python3-cffi \
+    python3-brotli \
+    libpango-1.0-0 \
+    libharfbuzz0b \
+    libpangoft2-1.0-0
+
+
+# Handle tzdata in non-interative mode.
+RUN ln -fs /usr/share/zoneinfo/UTC /etc/localtime; dpkg-reconfigure --frontend noninteractive tzdata
+
+# Set up reqs
+ADD requirements.txt /project/requirements.txt
+RUN pip install -r /project/requirements.txt
+
+# Add procfile (for honcho)
+ADD Procfile.dev /project/Procfile
+ADD manage.py /project/manage.py
+
+# Explicitly add the env
+ADD .env /project/.env
+
+# Build apps and collect static
+RUN export $(grep -v '^#' /project/.env | xargs -d '\n') && /project/bin/build_and_cleanup.sh
+
+# Set the environment vars and start the server
+CMD honcho start -f Procfile
+
+EXPOSE 8120

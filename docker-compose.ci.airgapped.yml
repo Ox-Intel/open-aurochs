@@ -1,0 +1,43 @@
+version: "3.2"
+
+services:  
+  db:
+    image: postgres:13.6
+    ports:
+     - 5432:5432
+    env_file:
+      - ".env"
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:6.0-alpine
+
+  aurochs:
+    build: 
+      context: .
+      dockerfile: Dockerfile.ci.airgapped
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - ./aurochs:/project/aurochs
+    env_file:
+      - ".env"
+    command: bash -c 'cd /project && export AIRGAPPED=true && export PORT=8120 && honcho start -f Procfile'
+    tty: true
+    stdin_open: true
+    ports:
+      - "8120:8120"
+      # - "127.0.0.1:8120:8120"
+
+  # ngrok:
+  #   image: shkoliar/ngrok:latest
+  #   ports:
+  #     - 4551:4551
+  #   links:
+  #     - aurochs
+  #   environment:
+  #     - DOMAIN=aurochs
+  #     - PORT=8120
+  #     - PARAMS=http -subdomain=aurochs -region=us -authtoken ${NGROK_AUTH_TOKEN} aurochs:8120  

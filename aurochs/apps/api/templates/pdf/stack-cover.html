@@ -1,0 +1,82 @@
+<html>
+<head>
+    <title>{{ title }}</title>
+    {% include "pdf/resources/fonts.css" %}
+    {% include "pdf/resources/ox_score.css" %}
+    <style type="text/css">
+        html {
+            font-family: "acf", "Helvetica Neue", "Helvetica", "sans-serif";
+            /*font-weight: 400;*/
+            /*font-style: normal;*/
+            color: #FFF;
+            text-align: left;
+        }
+
+        h1, h2, h3 {
+            font-family: "acf", "Helvetica Neue", "Helvetica", "sans-serif";
+
+
+        }
+
+        h1 {
+            margin-top: 300px;
+            font-size: 60px;
+        }
+
+        h2 {
+            margin-top: -20px;
+            font-size: 35px;
+            text-align: left;
+            opacity: 0.7;
+        }
+
+        h3 {
+            font-size: 30px;
+            opacity: 0.5;
+        }
+
+        #OX_logo_bottom_right {
+            position: fixed;
+            text-align: right;
+            right: 0;
+            bottom: 0;
+            color: #FFF;
+            width: 3rem;
+            height: auto;
+        }
+        #org_logo {
+            display: block;
+            text-align: center;
+            max-height: 400px;
+            margin-top:  50px;
+            margin-bottom: -240px;
+        }
+    </style>
+    {% include "pdf/resources/themed_cover_footer.css" %}
+</head>
+<header>
+    <div>
+
+    </div>
+</header>
+<body class="cover_page">
+
+<svg id="OX_logo_bottom_right" xmlns="http://www.w3.org/2000/svg"
+    
+     viewBox="0 0 789 880">
+        {% include "pdf/resources/_ox_logo_path.svg" %}
+</svg>
+{% if org_logo_resized_base64 %}<div id="org_logo"><img src="data:image/png;base64,{{org_logo_resized_base64|safe}}"/></div>{% endif %}
+<h1>{{ title }}</h1>
+<h2>{{ org_name }}</h2>
+<h3>{{ now|date:"M d, Y" }}</h3>
+
+<div class="report_scores pinned_bottom_left">
+    {# <div class="ox_score small"> #}
+        {# <div class="score">{{ stack.average_ox_score|floatformat:0 }}</div> #}
+        {# <div class="percent">%</div> #}
+        {# <div class="label">Ox Score</div> #}
+    {# </div> #}
+    </div>
+  </body>
+</html>

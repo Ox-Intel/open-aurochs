@@ -1,0 +1,230 @@
+{% load aurochs_helpers %}
+<html>
+<head>
+    <title>{{ title }}</title>
+    {% include "pdf/resources/fonts.css" %}
+    {% include "pdf/resources/common.css" %}
+    <style type="text/css">
+        h2 { 
+            margin-bottom: -2.25rem;
+        }
+        h2 .name {
+            display: inline-block;
+        }
+        .framework_heading {
+            clear: both;
+            margin-bottom: 3rem;
+        }
+        h2 .scored_at {
+            display: inline-block;
+            font-size: 16px;
+            font-weight: 400;
+            color: #AAA;
+            margin-left: 4px;
+        }
+        h2 .framework {
+            display: block;
+            font-weight: 400;
+            font-size: 18px;
+            margin-left: 34px;
+            margin-top: 4px;
+        }
+        h3 {
+            margin-bottom: 4px;
+            margin-top: 12px;
+        }
+        .hero_donut {
+            width: 260px;
+            height: 260px;
+            margin: 20px auto;
+        }
+        body {
+            page-break-before: always;
+        }
+        .ox_score_with_horns { 
+            margin-right: 6px;
+        }
+        .score_floater {
+            text-align: center;
+            float: right;
+            margin-right: 0px;
+            width: 70px;
+            margin-top: -20px;
+        }
+        .score_floater.unscored {
+            color: #AAA;
+        }
+        .criteria_bar {
+            width: 100%;
+            position: relative;
+            height: 10px;
+        }
+        .criteria_bars h3 {
+            margin-bottom: 2px;
+            font-size: 1.2em;
+        }
+        .criteria_bar .inner, .criteria_bar .outer {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 10px;
+        }
+        .criteria_bar .inner {
+            display: block;
+            height: 10px;
+            z-index: 3;
+        }
+        .criteria_bar .outer {
+            display: block;
+            position: relative;
+            opacity: 0.3;
+            z-index: 2;
+        }
+        .criteria {
+            width: 100%;
+            break-inside: avoid;
+            margin-bottom: 24px;
+        }
+        .comment {
+            margin: 4px 0 1px 0;
+            break-inside: avoid;
+        }
+        .comment .scorer {
+            width: 50%;
+        }
+        .comment .name {
+            font-weight: bold;
+            margin-left: 4px;
+            margin-right: 6px;
+        }
+        .comment .scored_at {
+            font-size: 0.8rem;
+        }
+        .comment .comments {
+            font-size: 13px;
+            line-height: 13px;
+        }
+
+        .inline_donut {
+            display: inline-block;
+        }
+        .score_visual {
+            float: right;
+/*            width: 40%;*/
+            margin-top: 4px;
+            margin-right: -20px;
+            margin-left: 10px;
+            color: #FFF;
+            width: 70px;
+            text-align: center;
+        }
+        .score_visual.unscored {
+            color: #AAA;
+        }
+        .score_box {
+            font-size: 0.9rem;
+            font-weight: 800;
+            padding: 8px 3px 3px 3px;
+            border-radius: 0.25rem;
+            border: 1px solid #000;
+            color: #000;
+            font-weight: 600;
+            width: 1.2rem;
+            height: 1rem;
+            vertical-align: middle;
+        }
+        {% if distribution_text %}
+         @page {
+            @bottom-center {
+                font-family: "acf", "Helvetica Neue", "Helvetica", "sans-serif";
+                color: #000;
+                font-weight: 400;
+                font-size: 1.1em;
+                content: "{{distribution_text|safe}}";
+                margin: 45px 0px 0px 0px;
+            }
+        }
+        {% endif %}
+
+    </style>
+</head>
+<body>
+<header>
+    <div class="org_name">
+        {{ org_name }}
+    </div>
+    <svg id="OX_logo_top_right" class="ox_horns_header" xmlns="http://www.w3.org/2000/svg"
+         width="180px" height="70px"
+         viewBox="0 0 789 880">
+        {% include "pdf/resources/_ox_logo_path_horns_only.svg" %}
+    </svg>
+    
+</header>
+<div class="content">
+    <div class="framework">
+        <table class="framework_heading">
+            <tr>
+                <td class="name">
+                    <h2>
+                        <span class="inline-donut">{% render_donut_chart scorecard.framework %}</span> 
+                        <div class="inline_block">
+                            <div class="name">{{ scorecard.scorer.full_name }}</div>
+                            <div class="scored_at">{{ scorecard.modified_at|date:"F d, Y" }}</div>
+                        </div>
+                        <div class="framework">{{ scorecard.framework }}</div>
+                    </h2>
+                </td>
+                <td class="average_ox_score">
+                    <div class="ox_score_with_horns">
+                        <svg class="horns" viewBox="0 0 789 880">{% include "pdf/resources/_ox_logo_path_horns_only_white.svg" %}</svg>
+                        <div class="score">{{ scorecard.ox_score|floatformat:0 }}</div>
+                        {% if scorecard.has_skipped  %}
+                        <div class="star">*</div>
+                        {% endif %}
+                    </div>
+                </td>
+            </tr>
+        </table>        
+
+
+        {% for scs in scorecard.scores %}
+        <div class="criteria">
+            <div class="criteria_bar">
+            {% if scs.score %}
+                <div class="inner" style="background-color: {% criteria_color scs.criteria.index %}; width: {{ scs.score|multiply:10 }}%; z-index: 3;"></div>
+            {% else %}
+                <div class="inner" style="background-color: {% criteria_color scs.criteria.index %}; width: 1px; z-index: 3;"></div>
+            {% endif %}
+                <div class="outer" style="background-color: {% criteria_color scs.criteria.index %}; width: 100%; opacity: 0.3; z-index: 2"></div>
+            </div>
+
+            <h3>{{ scs.criteria.name }}</h3>
+            <div class="score_visual {% if scs.score is None %}unscored{% endif %}">
+                {% if scs.score is None %}
+                    Skipped
+                {% else %}
+                        {# {% dot_plot_single scs.score|floatformat:0 %} #}
+                    <div class="score_box" style="border-color: {% criteria_color_outline scs.criteria.index %};">{{scs.score|floatformat:0}}</div>
+                {% endif %}
+            </div>
+
+            <div class="comment">
+                <div class="comments">
+                    {{scs.comment|default:"No comments"|linebreaks}}
+                </div>
+            </div>
+        
+        </div>
+        {% endfor %}
+        
+    </div>
+</div>
+<footer>
+    <div class="section_blocks">
+      
+    </div>
+</footer>
+
+</body>
+</html>

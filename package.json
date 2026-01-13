@@ -1,0 +1,14 @@
+{
+  "name": "ox-aurochs-base",
+  "version": "0.0.51",
+  "engines": {
+    "node": "18.x"
+  },
+  "private": true,
+  "scripts": {
+    "build": "echo 'Nothing to build at root, handled in bin/build_and_cleanup.sh'"
+  },
+  "dependencies": {
+    "core-js": "^3.22.5"
+  }
+}

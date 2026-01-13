@@ -1,0 +1,170 @@
+{% load aurochs_helpers %}
+<html>
+<head>
+    <title>{{ title }}</title>
+    {% include "pdf/resources/fonts.css" %}
+    {% include "pdf/resources/common.css" %}
+    <style type="text/css">
+        h1 {
+            margin-bottom: 0;
+        }
+        .hero_donut {
+            width: 260px;
+            height: 260px;
+            margin: 20px auto;
+        }
+        .importance_label {
+            font-size: 0.8em;
+            font-style: italic;
+            padding: 4px 0 8px 0;
+            text-align: center;
+        }
+        .criteria_circle {
+            border-radius: 9999px;
+            color: #FFF;
+            font-weight: bold;
+            margin-top: 0 !important;
+
+        }
+        .criteria_list {
+            margin-top: 40px;
+        }
+        .criteria_list .criteria .circle_cell {
+            padding-right: 10px;
+            vertical-align: top;
+            min-height: 50px;
+        }
+        .criteria_list .criteria .name {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 4px;
+        }
+        .criteria_list .criteria .description {
+            font-size: 0.9rem;
+            line-height: 1rem;
+        }
+        .criteria_list .criteria .criteria_circle {
+            text-align: center;
+            font-weight: 700;
+            display: block;
+
+        }
+        .criteria_list .criteria .description_cell {
+            padding-bottom: 20px;
+        }
+        body {
+            page-break-before:always;
+        }
+        .framework_heading .average_ox_score {
+            vertical-align: top;
+            padding-top: 20px;
+        }
+        .framework_heading .average_ox_score .ox_score_with_horns {
+            margin-right: 5px;
+        }
+        {% if distribution_text %}
+         @page {
+            @bottom-center {
+                font-family: "acf", "Helvetica Neue", "Helvetica", "sans-serif";
+                color: #000;
+                font-weight: 400;
+                font-size: 1.1em;
+                content: "{{distribution_text|safe}}";
+                margin: 45px 0px 0px 0px;
+            }
+        }
+        {% endif %}
+
+    </style>
+</head>
+<body>
+<header>
+    <div class="org_name">
+        {{ org_name }}
+    </div>
+    <svg id="OX_logo_top_right" class="ox_horns_header" xmlns="http://www.w3.org/2000/svg"
+         width="180px" height="70px"
+         viewBox="0 0 789 880">
+        {% include "pdf/resources/_ox_logo_path_horns_only.svg" %}
+    </svg>
+    
+</header>
+<div class="content">
+    <div class="framework">
+        <table class="framework_heading">
+            <tr>
+                <td class="name">
+                    <h1>{{ f.name }}</h1>
+                    <div class="subtitle">{{ f.subtitle }}</div>
+                </td>
+                <td class="average_ox_score">
+                    <div class="ox_score_with_horns">
+                        <svg class="horns" viewBox="0 0 789 880">{% include "pdf/resources/_ox_logo_path_horns_only_white.svg" %}</svg>
+                        <div class="score">{% framework_report_ox_score f report  %}</div>
+                        {% if f.has_skipped  %}
+                        <div class="star">*</div>
+                        {% endif %}
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+
+        <div class="hero_donut">
+            {% render_donut_chart f %}
+            <div class="importance_label">Relative Importance</div>
+        </div>
+        <table class="criteria_list">
+        <tr>
+            <td class="importance_label">Importance</td>
+        </tr>
+        {% for c in f.criteria %}
+        <tr class="criteria">
+            <td class="circle_cell">
+                <div class="criteria_circle" style="background-color: {% criteria_color c.index %}; {% weight_circle_css c %}"> 
+                    <span >{{c.weight|floatformat:0 }}</span>
+                </div>
+        
+          {# c.weight >= 10 ? 'padding-right: 20px;padding-left: 20px; margin-right:2px;' : '' #}
+
+            </td>
+            <td class="description_cell">
+                <div class="name">{{ c.name }}</div>
+                <div class="description">{{ c.description|linebreaksbr }}</div>
+            </td>
+        </tr>
+        {% endfor %}
+        </table>
+    </div>
+</div>
+<footer>
+    <div class="section_blocks">
+        <div class="footer_section first">
+            <div class="name">Overview</div>
+            <div class="bar"></div>
+        </div>
+        <div class="footer_section center active">
+            <div class="name">Frameworks</div>
+            <div class="bar"></div>
+        </div>
+        <div class="footer_section center">
+            <div class="name">Scores</div>
+            <div class="bar"></div>
+        </div>
+        {# <div class="footer_section center active"> #}
+            {# <div class="name">Scorecards</div> #}
+            {# <div class="bar"></div> #}
+        {# </div> #}
+        <div class="footer_section {% if has_sources %}center{% else %}last{% endif %}">
+            <div class="name">Notes</div>
+            <div class="bar"></div>
+        </div>
+        {% if has_sources %}<div class="footer_section last">
+            <div class="name">Sources</div>
+            <div class="bar"></div>
+        </div>{% endif %}
+    </div>
+</footer>
+
+</body>
+</html>

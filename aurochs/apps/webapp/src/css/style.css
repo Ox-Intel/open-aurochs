@@ -1,0 +1,387 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+@import "./ox-slider.css";
+
+html {
+  @apply h-full;
+}
+
+body {
+  @apply h-full;
+}
+
+#logo > path,
+#logo > polygon {
+  fill: currentColor;
+}
+
+.text-linebreaks {
+  white-space: pre-line;
+}
+.btn {
+  @apply whitespace-nowrap;
+  padding: 0.65rem 0.8rem;
+  height: 2.75rem;
+  min-height: 2.75rem;
+  font-size: 0.85rem;
+}
+.btn-sm {
+  padding: 0.5rem 0.7rem;
+  height: 2rem;
+  min-height: 2rem;
+}
+.btn-circle:where(.btn-sm) {
+  padding: 0;
+  height: 2rem;
+  min-height: 2rem;
+}
+.btn-square:where(.btn-sm) {
+  padding: 0;
+  height: 2rem;
+  min-height: 2rem;
+}
+.btn[disabled]:not(.saving) {
+  background: none;
+  --tw-text-opacity: 0.4;
+}
+.btn[disabled].saving {
+  @apply bg-base-300;
+}
+[data-theme="dark"] {
+  color-scheme: dark;
+  scrollbar-color: dark;
+  scrollbar-color: var(--bc) rgba(30 41 59 / var(--tw-bg-opacity));
+}
+
+.prose a.no-underline,
+.prose a.no-underline div {
+  text-decoration: none;
+  text-decoration-line: none;
+}
+.hideHiddenInExport .hiddenInExport {
+  visibility: hidden;
+}
+.hideHiddenInExport .removedInExport {
+  display: none;
+}
+.hideHiddenInExport.addExportPadding,
+.hideHiddenInExport .addExportPadding {
+  padding-bottom: 20px;
+}
+
+.ql-editor,
+.ql-container {
+  height: auto;
+  min-height: 8rem;
+  font-family: "acf", "Helvetica Neue", "Helvetica", "sans-serif";
+}
+.ql-container a {
+  @apply text-primary;
+}
+.ql-editor {
+  @apply prose max-w-none;
+  font-size: 1rem;
+  font-family: "acf", "Helvetica Neue", "Helvetica", "sans-serif";
+}
+
+.ql-toolbar.ql-snow {
+  @apply rounded-t-md shadow-sm bg-base-100 text-neutral;
+}
+.ql-snow .ql-stroke {
+  @apply text-neutral stroke-neutral;
+}
+.ql-snow .ql-fill,
+.ql-snow .ql-stroke.ql-fill {
+  @apply text-dark-grey fill-dark-grey;
+  /*@apply text-neutral stroke-neutral fill-neutral;*/
+}
+.ql-snow .ql-picker-options {
+  @apply bg-base-100 text-neutral;
+}
+.ql-snow.ql-toolbar button:hover,
+.ql-snow .ql-toolbar button:hover,
+.ql-snow.ql-toolbar button:focus,
+.ql-snow .ql-toolbar button:focus,
+.ql-snow.ql-toolbar .ql-picker-label:hover,
+.ql-snow .ql-toolbar .ql-picker-label:hover,
+.ql-snow.ql-toolbar .ql-picker-item:hover,
+.ql-snow .ql-toolbar .ql-picker-item:hover {
+  @apply bg-base-200 text-neutral;
+}
+
+.ql-snow.ql-toolbar button.ql-active,
+.ql-snow .ql-toolbar button.ql-active,
+.ql-snow.ql-toolbar .ql-picker-label.ql-active,
+.ql-snow .ql-toolbar .ql-picker-label.ql-active,
+.ql-snow.ql-toolbar .ql-picker-item.ql-selected,
+.ql-snow .ql-toolbar .ql-picker-item.ql-selected {
+  @apply bg-base-300 text-neutral;
+}
+.ql-snow.ql-toolbar button.ql-active .ql-fill,
+.ql-snow .ql-toolbar button.ql-active .ql-fill,
+.ql-snow.ql-toolbar .ql-picker-label.ql-active .ql-fill,
+.ql-snow .ql-toolbar .ql-picker-label.ql-active .ql-fill,
+.ql-snow.ql-toolbar .ql-picker-item.ql-selected .ql-fill,
+.ql-snow .ql-toolbar .ql-picker-item.ql-selected .ql-fill,
+.ql-snow.ql-toolbar button.ql-active .ql-stroke.ql-fill,
+.ql-snow .ql-toolbar button.ql-active .ql-stroke.ql-fill,
+.ql-snow.ql-toolbar .ql-picker-label.ql-active .ql-stroke.ql-fill,
+.ql-snow .ql-toolbar .ql-picker-label.ql-active .ql-stroke.ql-fill,
+.ql-snow.ql-toolbar .ql-picker-item.ql-selected .ql-stroke.ql-fill,
+.ql-snow .ql-toolbar .ql-picker-item.ql-selected .ql-stroke.ql-fill {
+  @apply fill-neutral;
+}
+.ql-snow.ql-toolbar button.ql-active .ql-stroke,
+.ql-snow .ql-toolbar button.ql-active .ql-stroke,
+.ql-snow.ql-toolbar .ql-picker-label.ql-active .ql-stroke,
+.ql-snow .ql-toolbar .ql-picker-label.ql-active .ql-stroke,
+.ql-snow.ql-toolbar .ql-picker-item.ql-selected .ql-stroke,
+.ql-snow .ql-toolbar .ql-picker-item.ql-selected .ql-stroke,
+.ql-snow.ql-toolbar button.ql-active .ql-stroke-miter,
+.ql-snow .ql-toolbar button.ql-active .ql-stroke-miter,
+.ql-snow.ql-toolbar .ql-picker-label.ql-active .ql-stroke-miter,
+.ql-snow .ql-toolbar .ql-picker-label.ql-active .ql-stroke-miter,
+.ql-snow.ql-toolbar .ql-picker-item.ql-selected .ql-stroke-miter,
+.ql-snow .ql-toolbar .ql- .ql-container.ql-snow {
+  @apply stroke-neutral;
+}
+.ql-container.ql-snow {
+  @apply rounded-b-md;
+}
+.ql-snow .ql-editor pre.ql-syntax,
+.ql-bubble .ql-editor pre.ql-syntax,
+.ql-snow pre.ql-syntax,
+.ql-bubble pre.ql-syntax {
+  @apply bg-base-300 text-dark-grey;
+}
+
+.w-1\/12 {
+  width: 8.3333%;
+}
+.w-2\/12 {
+  width: 16.6666%;
+}
+.w-3\/12 {
+  width: 25%;
+}
+.w-4\/12 {
+  width: 33.3333%;
+}
+.w-5\/12 {
+  width: 41.6666%;
+}
+.w-6\/12 {
+  width: 50%;
+}
+.w-7\/12 {
+  width: 58.3333%;
+}
+.w-8\/12 {
+  width: 66.6666%;
+}
+.w-9\/12 {
+  width: 75%;
+}
+.w-10\/12 {
+  width: 83.3333%;
+}
+.w-11\/12 {
+  width: 91.6666%;
+}
+.w-12\/12 {
+  width: 100%;
+}
+
+.table {
+  height: fit-content;
+}
+
+[data-theme="dark"] .text-medium-grey,
+[data-theme="dark"] .hover\:text-medium-grey:hover {
+  color: var(--dark-medium-grey);
+}
+
+[data-theme="dark"] .bg-medium-grey,
+[data-theme="dark"] .hover\:bg-medium-grey:hover {
+  background-color: var(--dark-medium-grey);
+}
+
+[data-theme="dark"] .border-medium-grey,
+[data-theme="dark"] .hover\:border-medium-grey:hover {
+  border-color: var(--dark-medium-grey);
+}
+
+[data-theme="dark"] .text-dark-grey,
+[data-theme="dark"] .hover\:text-dark-grey:hover {
+  color: var(--dark-dark-grey);
+}
+
+[data-theme="dark"] .bg-dark-grey,
+[data-theme="dark"] .hover\:bg-dark-grey:hover {
+  background-color: var(--dark-dark-grey);
+}
+
+[data-theme="dark"] .border-dark-grey,
+[data-theme="dark"] .hover\:border-dark-grey:hover {
+  border-color: var(--dark-dark-grey);
+}
+
+[data-theme="dark"] .text-base-400,
+[data-theme="dark"] .hover\:text-base-400:hover {
+  color: var(--dark-base-400);
+}
+
+[data-theme="dark"] .bg-base-400,
+[data-theme="dark"] .hover\:bg-base-400:hover {
+  background-color: var(--dark-base-400);
+}
+
+[data-theme="dark"] .border-base-400,
+[data-theme="dark"] .hover\:border-base-400:hover {
+  border-color: var(--dark-base-400);
+}
+
+[data-theme="dark"] .text-base-500,
+[data-theme="dark"] .hover\:text-base-500:hover {
+  color: var(--dark-base-500);
+}
+
+[data-theme="dark"] .bg-base-500,
+[data-theme="dark"] .hover\:bg-base-500:hover {
+  background-color: var(--dark-base-500);
+}
+
+[data-theme="dark"] .border-base-500,
+[data-theme="dark"] .hover\:border-base-500:hover {
+  border-color: var(--dark-base-500);
+}
+
+[data-theme="dark"] .text-base-150,
+[data-theme="dark"] .hover\:text-base-150:hover {
+  color: var(--dark-base-150);
+}
+
+[data-theme="dark"] .bg-base-150,
+[data-theme="dark"] .hover\:bg-base-150:hover {
+  background-color: var(--dark-base-150);
+}
+
+[data-theme="dark"] .border-base-150,
+[data-theme="dark"] .hover\:border-base-150:hover {
+  border-color: var(--dark-base-150);
+}
+
+[data-theme="dark"] .text-base-250,
+[data-theme="dark"] .hover\:text-base-250:hover {
+  color: var(--dark-base-250);
+}
+
+[data-theme="dark"] .bg-base-250,
+[data-theme="dark"] .hover\:bg-base-250:hover {
+  background-color: var(--dark-base-250);
+}
+
+[data-theme="dark"] .border-base-250,
+[data-theme="dark"] .hover\:border-base-250:hover {
+  border-color: var(--dark-base-250);
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme="light"]) {
+    color-scheme: dark;
+    scrollbar-color: dark;
+    scrollbar-color: var(--bc) rgba(30 41 59 / var(--tw-bg-opacity));
+
+    .text-medium-grey,
+    .hover\:text-medium-grey:hover {
+      color: var(--dark-medium-grey);
+    }
+
+    .bg-medium-grey,
+    .hover\:bg-medium-grey:hover {
+      background-color: var(--dark-medium-grey);
+    }
+
+    .border-medium-grey,
+    .hover\:border-medium-grey:hover {
+      border-color: var(--dark-medium-grey);
+    }
+
+    .text-dark-grey,
+    .hover\:text-dark-grey:hover {
+      color: var(--dark-dark-grey);
+    }
+
+    .bg-dark-grey,
+    .hover\:bg-dark-grey:hover {
+      background-color: var(--dark-dark-grey);
+    }
+
+    .border-dark-grey,
+    .hover\:border-dark-grey:hover {
+      border-color: var(--dark-dark-grey);
+    }
+
+    .text-base-400,
+    .hover\:text-base-400:hover {
+      color: var(--dark-base-400);
+    }
+
+    .bg-base-400,
+    .hover\:bg-base-400:hover {
+      background-color: var(--dark-base-400);
+    }
+
+    .border-base-400,
+    .hover\:border-base-400:hover {
+      border-color: var(--dark-base-400);
+    }
+
+    .text-base-500,
+    .hover\:text-base-500:hover {
+      color: var(--dark-base-500);
+    }
+
+    .bg-base-500,
+    .hover\:bg-base-500:hover {
+      background-color: var(--dark-base-500);
+    }
+
+    .border-base-500,
+    .hover\:border-base-500:hover {
+      border-color: var(--dark-base-500);
+    }
+
+    .text-base-150,
+    .hover\:text-base-150:hover {
+      color: var(--dark-base-150);
+    }
+
+    .bg-base-150,
+    .hover\:bg-base-150:hover {
+      background-color: var(--dark-base-150);
+    }
+
+    .border-base-150,
+    .hover\:border-base-150:hover {
+      border-color: var(--dark-base-150);
+    }
+
+    .text-base-250,
+    .hover\:text-base-250:hover {
+      color: var(--dark-base-250);
+    }
+
+    .bg-base-250,
+    .hover\:bg-base-250:hover {
+      background-color: var(--dark-base-250);
+    }
+
+    .border-base-250,
+    .hover\:border-base-250:hover {
+      border-color: var(--dark-base-250);
+    }
+  }
+}

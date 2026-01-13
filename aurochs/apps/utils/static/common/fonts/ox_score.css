@@ -1,0 +1,74 @@
+<style type="text/css">
+    .ox_score {
+        line-height: 1.5em;
+        background: #8E24FF;
+        color:  #FFF;
+        display: inline-block;
+        /*width: 120px;*/
+        font-family: "acf", "Helvetica Neue", "Helvetica", "sans-serif";
+
+        text-align: center;
+        border-radius: 6px;
+        padding:  32px 12px 0 12px;
+        width:  90px;
+    }
+    .ox_score .score {
+        font-size:  60px;
+        font-family: "acf", "Helvetica Neue", "Helvetica", "sans-serif";
+
+        display: inline-block;
+        margin: 0;
+        margin-left:  2px;
+    }
+    .ox_score .percent {
+        font-size:  24px;
+        margin-left:  -4px;
+        display: inline-block;
+    }
+    .ox_score .label {
+        font-size:  10px;
+        display:  block;
+        clear:  both;
+        text-transform: uppercase;
+        opacity: 0.4;
+        margin:  -8px 0 6px 0;
+    }
+    .ox_score.small {
+        padding:  18px 12px 0 12px;
+        width: 80px;
+    }
+    .ox_score.small .score {
+        font-size:  45px;
+        margin-left:  2px;
+    }
+    .ox_score.small .percent {
+        font-size:  18px;
+        margin-left:  -4px;
+        /*margin-left:  -2px;*/
+    }
+    .ox_score.small .label {
+        font-size:  8px;
+        display:  block;
+        margin:  -8px 0 0px 0;
+    }
+    .ox_score.inverted {
+        background: #FFF;
+        color:  #8E24FF;
+        opacity:  1;
+
+    }
+    header .report_scores.pinned_top_right {
+        position: fixed;
+        top:  -110px;
+        right:  60px;
+        text-align: right;
+        padding: 0;
+    }
+    .report_scores.pinned_bottom_left {
+        position: fixed;
+        bottom: -10px;
+        left:  0px;
+        text-align: right;
+        padding: 0;
+    }
+</style>

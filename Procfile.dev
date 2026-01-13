@@ -1,0 +1,4 @@
+web: PYTHONUNBUFFERED=true uvicorn aurochs.asgi:application --host 0.0.0.0 --port $PORT  --reload --reload-include '*.html' --reload-include '*.js' --reload-include '*.py' --reload-include '*.vue' --reload-include '*.css'  --reload-exclude 'node_modules/*' --workers=8
+celery: rm -f  celerybeat.pid; DJANGO_SETTINGS_MODULE=aurochs.envs.dev C_FORCE_ROOT=true LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 celery  --app aurochs worker -c 4 -Q celery
+beat: rm -f celerybeat.pid; DJANGO_SETTINGS_MODULE=aurochs.envs.dev C_FORCE_ROOT=true LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 celery --app aurochs beat 
+# static: export NODE_OPTIONS=--max-old-space-size=8192 && cd aurochs/apps/webapp && yarn set version berry && yarn watch

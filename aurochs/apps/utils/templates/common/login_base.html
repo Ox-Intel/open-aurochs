@@ -1,0 +1,68 @@
+{% extends "google_meta.html" %}{% load static %}
+
+{% block pre_meta %}<!doctype html >
+<html class="{% block html_extra_classes %}bg-slate-800{% endblock %}" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <title>{% block title %}{{ title }}{% endblock %}</title>
+    <meta name="description" content="{% block description %}{{ description }}{% endblock %}">{% block favicon %}
+    <link rel="icon" href="{{ request.scheme }}://{{ request.get_host }}{% static 'common/img/favicon.ico' %}" sizes="any"><!-- 32×32 -->
+    <link rel="icon" href="{{ request.scheme }}://{{ request.get_host }}{% static 'common/img/icon.svg' %}" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="{{ request.scheme }}://{{ request.get_host }}{% static 'common/img/apple-touch-icon.png' %}"><!-- 180×180 -->
+    <link rel="manifest" href="{{ request.scheme }}://{{ request.get_host }}{% static 'common/img/manifest.webmanifest.html' %}">
+    {% endblock %}
+{% endblock %}
+
+{% block meta %}{{block.super}}{% endblock %}
+
+{% block post_meta %}
+{% block css %}
+<link href="{{ request.scheme }}://{{ request.get_host }}{% static 'compiled/css/common.css' %}" rel="stylesheet" />
+{# <link href="{{ request.scheme }}://{{ request.get_host }}{% static 'compiled/css/auth.css' %}" rel="stylesheet" /> #}
+<style type="text/css">
+    .errorlist {
+        color:  #fea65e;
+    }
+    #ox-login-logo {
+        width:  auto;
+        height:  auto;
+        margin-bottom:  40px;
+    }
+    #ox-login-logo .logo{
+        margin: 0 auto;
+        width:  8rem;
+    }
+    form {
+        margin-top: 0;
+    }
+    #id_submit[disabled] {
+        background: #888;
+    }
+    #oxapp {
+        margin-top: 12rem;
+    }
+</style>
+{% endblock %}
+
+{% block extra_head %}{% endblock %}
+</head>
+
+<body {% block body_extra %}{% endblock %}>
+    {% block body %}{% block nav %}
+    {% endblock %}
+    {% block content %}{% endblock content %}
+    {% block footer %}{% endblock %}{% endblock body %}
+    {% block js %}
+    <script src="{{ request.scheme }}://{{ request.get_host }}{% static 'compiled/js/common.js' %}"></script>
+    {# No login.js yet.  #}
+    {# <script src="{{ request.scheme }}://{{ request.get_host }}{% static 'compiled/js/login.js' %}"></script>#}
+    <script>
+      window.aurochs = window.aurochs || {};
+      window.aurochs.page = 'dashboard';
+      {% include "webapp/_root_urls.html" %}
+    </script>
+    {% endblock %}
+</body>
+</html>{% endblock %}

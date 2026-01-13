@@ -1,0 +1,87 @@
+<html>
+<head>
+    <title>{{ title }}</title>
+    {% include "pdf/resources/fonts.css" %}
+    {% include "pdf/resources/ox_score.css" %}
+
+    <style type="text/css">
+        html {
+            font-family: "acf", "Helvetica Neue", "Helvetica", "sans-serif";
+            font-family: "acf", "Helvetica Neue", "Helvetica", "sans-serif";
+            /*font-weight: 400;*/
+            /*font-style: normal;*/
+            /*background-color: #8E24FF;*/
+            /*color: #FFF;*/
+            /*background-color: #FFF;*/
+            /*color: #8E24FF;*/
+            text-align: center;
+        }
+
+        #OX_logo_centered {
+            /*position: fixed;*/
+            text-align: center;
+            /*right: 0;*/
+            /*top: 500px;*/
+            margin-top: 440px;
+            color: #FFF;
+        }
+
+        @page {
+            margin: 80px 20px 40px 20px;
+            background-color: #ffffff;
+            color: #FFF;
+        }
+
+        @page {
+            @bottom-center {
+                font-family: "acf", "Helvetica Neue", "Helvetica", "sans-serif";
+                color: #000;
+                font-weight: 400;
+                font-size: 1.1em;
+                content: "{{distribution_text|safe}}";
+                margin: -68px 0px 0px 0px;
+            }
+        }
+
+        @page {
+            @top-center {
+                font-family: "acf", "Helvetica Neue", "Helvetica", "sans-serif";
+                color: #000000;
+                font-weight: 400;
+                font-size: 1.1em;
+                content: "{{distribution_text|safe}}";
+                margin: 35px 0px 0px 0px;
+
+            }
+        }
+
+      #OX_logo_centered {
+        /*position: fixed;*/
+        text-align: center;
+        /*right: 0;*/
+        /*top: 500px;*/
+        margin: 340px auto 0 auto;
+        width: 400px; 
+        height: 400px;
+        color: #000;
+        position: relative;
+      }
+      @page {
+        margin: 80px 20px 40px 20px;
+
+      }
+    </style>
+
+</head>
+<body class="">
+<header>
+    <div>
+
+    </div>
+</header>
+<div id="OX_logo_centered">
+    {% include "pdf/resources/_ox_logo_path_horns_only_black.svg" %}
+</div>
+
+</body>
+</html>

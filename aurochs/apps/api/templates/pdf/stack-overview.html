@@ -1,0 +1,486 @@
+{% load aurochs_helpers %}
+<html>
+<head>
+    <title>{{ title }}</title>
+    {% include "pdf/resources/fonts.css" %}
+    {% include "pdf/resources/common.css" %}
+    <style type="text/css">
+        h1 {
+            margin-bottom: 0;
+        }
+        .hero_donut {
+            width: 260px;
+            height: 260px;
+            margin: 20px auto;
+        }
+
+        .framework {
+/*            page-break-before:always;*/
+            margin-top: 20px;
+            clear: both;
+            position: relative;
+            display: block;
+        }
+        .framework h2 {
+            position: relative;
+            display: block;
+            margin-top: 0;
+        }
+        .framework h2 .h2_content {
+            width: 100%;
+            padding: 20px 0 0 0;
+            display: block;
+            clear: both;
+            vertical-align: middle
+        }
+        .framework h2 .h2_content .inline-donut {
+            padding-bottom: 4px;
+        }
+        .importance_label {
+            font-size: 0.8em;
+            font-style: italic;
+            padding: 4px 0 8px 0;
+            text-align: center;
+        }
+        .criteria_circle {
+            border-radius: 9999px;
+            color: #FFF;
+            font-weight: bold;
+
+        }
+        .criteria_list {
+            margin-top: 40px;
+        }
+        .criteria_list .criteria .circle_cell {
+            padding-right: 2px;
+            vertical-align: bottom;
+        }
+        .criteria_list .criteria .name {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 6px;
+            vertical-align: middle;
+            
+        }
+        .criteria_list .criteria .criteria_circle {
+            text-align: center;
+            font-weight: 700;
+            display: block;
+
+        }
+        .criteria_bar {
+            width: 100%;
+            position: relative;
+            height: 20px;
+        }
+        .criteria {
+            vertical-align: bottom;
+        }
+        .criteria_bars, .criteria_list {
+            
+        }
+        h3 {
+            margin-bottom: 6px;
+            padding-top: 10px;
+            font-size: 1.3em;
+        }
+        .criteria_bar .inner, .criteria_bar .outer {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 20px;
+        }
+
+        .criteria_bar .inner {
+            display: block;
+            height: 20px;
+            z-index: 3;
+            color: #FFF;
+            background: #8E24FF;
+            font-weight: 800;
+            margin-top: 0;
+            height: 22px;
+            padding: 8px 0 4px 8px;
+            vertical-align: middle;
+        }
+        .criteria_bar .inner.has_skipped {
+            background: #CCC;
+        }
+        .criteria_bar .inner .score {
+            padding: 2px;
+            font-size: 1.2em;
+            margin: 4px 0 0 2px;
+        }
+        .criteria_bar .inner .percent {
+            font-size: 0.8em;
+            margin-left: -4px;
+        }
+        .criteria_bar .outer {
+            display: block;
+            position: relative;
+            opacity: 0.3;
+            z-index: 2;
+        }
+        .criteria_list {
+            width: 100%;
+        }
+        .criteria_list .circle_cell {
+            width: 8%;
+            min-height: 50px;
+            padding-bottom: 38px;
+        }
+        .criteria_list  .dot_plot_container {
+            position: relative;
+            height: 100%;
+            vertical-align: bottom;
+            margin: 0 auto;
+            margin-bottom: -4px;
+        }
+        .criteria_list  .dot_plot_container .report_plot {
+            position: absolute;
+            bottom: 0;
+        }
+        .criteria_list .description_cell {
+            vertical-align: bottom;
+            width: 30%;
+            font-size: 1em;
+            padding: 0;
+            padding-bottom: 43px;
+        }
+        .criteria_list .description_cell .name {
+            display: block;
+            vertical-align: middle;
+            height: 100%;
+            margin: 0;
+            padding-bottom: 6px;
+        }
+        .criteria_list .scores {
+            padding-bottom: 31px;
+            padding-left: 20px;
+            vertical-align: bottom;
+        }
+        .criteria_list .noise {
+            width: 10%;
+            padding-left: 4px;
+            padding-bottom: 12px;
+            text-align: center;
+            vertical-align: bottom;
+        }
+        .criteria_list .noise .badge_container {
+            margin: 0 auto 26px auto;
+        }
+       
+        .chart_label {
+            font-size: 0.8em;
+            text-align: center;
+        }
+        .chart_label.left {
+            text-align: left;
+        }
+        .average_ox_score {
+            margin-top: 10px;
+        }
+        .ox_score_with_horns {
+            margin-right: 5px;
+        }
+        {% if distribution_text %}
+         @page {
+            @bottom-center {
+                font-family: "acf", "Helvetica Neue", "Helvetica", "sans-serif";
+                color: #000;
+                font-weight: 400;
+                font-size: 1.1em;
+                content: "{{distribution_text|safe}}";
+                margin: 45px 0px 0px 0px;
+            }
+        }
+        {% endif %}
+
+        .report_bars {
+            display: block;
+        }
+        .ordered_reports {
+            vertical-align: middle;
+        }
+        .stack_bars {
+            width: 100%;
+        }
+        .stack_bars .stack_row {
+            width: 100%;
+            break-inside: avoid;
+            margin: 0;
+            margin-top: -20px;
+        }
+        .criteria_list {
+/*            break-inside: avoid;*/
+        }
+        .stack_bars td {
+            padding-top: 20px;
+        }
+        .ordered_reports .scores {
+            padding: 0;
+            width: 60px; 
+            padding-right: 20px;
+            vertical-align: middle;
+
+        }
+        .stack_bars .score_count {
+            display: block;
+            border: 1px solid #CCC;
+            color: #AAA;
+            padding: 8px;
+            margin: 14px auto 0 auto;
+            text-align: center;
+            height: 40px;
+            width: 40px;
+            border-radius: 8px;
+        }
+        .ordered_reports .score_bar {
+
+            vertical-align: middle;
+        }
+        .stack_bars .bar_container {
+            margin-top: -30px;
+            margin-left: 20px;
+            width: 100%;
+            
+/*            padding: 0;*/
+        }
+        .stack_bars .bar_container h3 {
+/*            margin: 0;*/
+/*            padding: 0;*/
+        }
+        .stack_bars .score_count .number {
+            font-size: 1.3em;
+            font-weight: 300;
+            margin-top: 6px;
+        }
+        .stack_bars .score_count .label {
+            text-transform: uppercase;
+            font-weight: 300;
+            font-size: 0.6em;
+            margin-top: 4px;
+        }
+        .ordered_reports {
+            width: 100%;
+        }
+        .count_col {
+            width: 80px;
+        }
+        .asterisk {
+
+        }
+        .framework_plots {
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+        .framework_plots h2 {
+            margin-top: 20px;
+            margin-bottom: 0;
+        }
+        .legend {
+/*            display: flex;*/
+            width: 100%;
+            display: block;
+            margin-left: 20px;
+        }
+        .legend .legend_avatar {
+            color: #FFF;
+            float: left;
+            margin-right: 6px;
+            margin-top: 0;
+            text-align: center;
+            display: block;
+            padding: 8px 0 0 0;
+            height: 14px;
+            width: 22px;
+            font-weight: bold;
+            font-size: 10px;
+            color: #FFF;
+            border-radius: 4px;
+/*            padding-top: 1px;*/
+        }
+        .legend .name {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 3px;
+        }
+        .legend .legend_line {
+            vertical-align: top;
+            display: inline-block;
+            width: 40%;
+            margin: 0;
+            margin-right: 4%;
+            margin-bottom: 10px;
+        }
+        .no_scorecards {
+            color: 999;
+            padding-top: 2px;
+        }
+
+    </style>
+</head>
+<body>
+<header>
+    <div class="org_name">
+        {{ org_name }}
+    </div>
+    <svg id="OX_logo_top_right" class="ox_horns_header" xmlns="http://www.w3.org/2000/svg"
+         width="180px" height="70px"
+         viewBox="0 0 789 880">
+        {% include "pdf/resources/_ox_logo_path_horns_only.svg" %}
+    </svg>
+    
+</header>
+<div class="content">
+    <div class="report overview">
+        <table class="report_heading">
+            <tr>
+                <td class="name">
+                    <h1>{{ stack.name }}</h1>
+                    <div class="subtitle">{{ stack.subtitle }}</div>        
+                </td>
+                <td class="average_ox_score">
+                    <div class="report_scores" style="float: right;">
+                        <div class="ox_score small">
+                            <div class="score">{{ stack.average_ox_score|floatformat:0 }}</div>
+                            <div class="percent">%</div>
+                            <div class="label">Average Ox Score</div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+    
+            {# <div class="report_bars"> #}
+            {# HTML like it's 1994, I guess, lol.  It works. #}
+            <table class="stack_bars" >
+                {% for r in stack.ordered_reports %}
+                <tr>
+                <td>
+                    <table class="stack_row">
+                <tr >
+                    <td style=""  class="count_col">
+                        <div class="score_count">
+                            <div class="label">Scores</div>
+                            <div class="number">{{ r.scorecards.count }}</div>
+                        </div>
+                    </td>
+                    <td style="" class="">
+                        <div class="bar_container">
+                            <h3>{{r.name}}</h3>
+                            <div class="criteria_bar">
+                                {% if r.scorecards.count <= 0 %}
+                                <div class="has_skipped no_scorecards">No Scores.</div>
+                                {% else %}
+                                <div class="inner {% if r.has_skipped %}has_skipped{% endif %}" style="width: {{ r.ox_score }}%;"> 
+                                    <span class="score">{{ r.ox_score|floatformat:0 }}</span>
+                                    <span class="percent">%</span>
+                                    {% if r.has_skipped %}<span class="asterisk">*</span>{% endif %}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                </table></td></tr>
+                {% endfor %}
+            </table>
+            {# </div> #}
+        {% for f in stack.frameworks %}
+        <div class="framework_plots">
+            <h2><span class="inline-donut">{% render_donut_chart f %}</span> {{ f.name }}</h2>
+            {# <table class="framework_heading"> #}
+                {# <tr> #}
+                    {# <td class="name"> #}
+                    {# </td> #}
+                    {# <td class="average_ox_score"> #}
+                        {# <div class="ox_score_with_horns"> #}
+                            {# <svg class="horns" viewBox="0 0 789 880">{% include "pdf/resources/_ox_logo_path_horns_only_white.svg" %}</svg> #}
+                            {# <div class="score">{% framework_stack_ox_score f stack  %}</div> #}
+                            {# {% if f.has_skipped  %} #}
+                            {# <div class="star">*</div> #}
+                            {# {% endif %} #}
+                        {# </div> #}
+                    {# </td> #}
+                {# </tr> #}
+            {# </table>         #}
+            <table class="criteria_list">
+                <tr>
+                    <td class="chart_label left" colspan="2">Importance</td>
+                    <td class="chart_label">Scores</td>
+                    {# <td class="chart_label">Noise</td> #}
+                </tr>
+                {% for c in f.criteria %}
+                <tr class="criteria">
+                    <td class="circle_cell" style="height: {% max_stack_offset_report scores_by_criteria|get_item:c.ox_id %}px; vertical-align: bottom">
+                        <div class="criteria_circle" style="background-color: {% criteria_color c.index %}; {% weight_circle_css c %}"> 
+                            <span >{{c.weight|floatformat:0 }}</span>
+                        </div>
+                
+                  {# c.weight >= 10 ? 'padding-right: 20px;padding-left: 20px; margin-right:2px;' : '' #}
+
+                    </td>
+                    <td class="description_cell" style="height: {% max_stack_offset_report scores_by_criteria|get_item:c.ox_id %}px; vertical-align: bottom">
+                        <div class="name">{{ c.name }}</div>
+                        {# <div class="description">{{ c.description|linebreaksbr }}</div> #}
+                    </td>
+                    <td class="scores">
+                        <div class="dot_plot_container" style="height: {% max_stack_offset_report scores_by_criteria|get_item:c.ox_id %}px; vertical-align: bottom">
+                        {% dot_plot_report stack c scores_by_criteria %}
+                        </div>
+                    </td>
+                    {# <td class="noise"> #}
+                        {# {% noise_badge scores_by_criteria|get_item:c.ox_id|get_item:'stddev' %} #}
+                    {# </td> #}
+                </tr>
+                {% endfor %}
+            </table>
+            <div class="legend">
+                {% for r in stack.authorized_reports %}
+                <div class="legend_line">
+                    <div class="inline_block legend_avatar" style="background-color: {% avatar_color_by_index r.color_index %}">
+                        {{ r.name|slice:2 }}
+                    </div>
+                    <div class="inline_block name">{{r.name}}</div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}        
+    </div>
+</div>
+<footer>
+    <div class="section_blocks">
+        <div class="footer_section first active">
+            <div class="name">Overview</div>
+            <div class="bar"></div>
+        </div>
+        <div class="footer_section center">
+            <div class="name">Frameworks</div>
+            <div class="bar"></div>
+        </div>
+        <div class="footer_section center">
+            <div class="name">Scores</div>
+            <div class="bar"></div>
+        </div>
+        {# <div class="footer_section center active"> #}
+            {# <div class="name">Scorecards</div> #}
+            {# <div class="bar"></div> #}
+        {# </div> #}
+        <div class="footer_section {% if has_sources %}center{% else %}last{% endif %}">
+            <div class="name">Notes</div>
+            <div class="bar"></div>
+        </div>
+        {% if has_sources %}<div class="footer_section last">
+            <div class="name">Sources</div>
+            <div class="bar"></div>
+        </div>{% endif %}
+    </div>
+</footer>
+
+</body>
+</html>
