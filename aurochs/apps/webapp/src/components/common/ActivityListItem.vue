@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import * as DOMPurify from "dompurify";
+import DOMPurify from "dompurify";
 import OxObjectIcon from "./icons/OxObjectIcon.vue";
 import OxScoreBox from "./OxScoreBox.vue";
 import OxOwnerBadges from "./OxOwnerBadges.vue";

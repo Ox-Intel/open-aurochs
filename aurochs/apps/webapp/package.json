@@ -37,7 +37,7 @@
     "axios": "^1.7.8",
     "click-outside-vue3": "^4.0.1",
     "core-js": "^3.27.1",
-    "daisyui": "^4.0.0",
+    "daisyui": "^2.52.0",
     "dompurify": "^3.2.4",
     "html-to-image": "^1.11.4",
     "json5": "^2.2.3",
@@ -124,5 +124,5 @@
       "last 1 safari version"
     ]
   },
-  "packageManager": "yarn@3.2.3"
+  "packageManager": "yarn@4.12.0"
 }

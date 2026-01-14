@@ -72,7 +72,7 @@
 </template>
 
 <script>
-import * as DOMPurify from "dompurify";
+import DOMPurify from "dompurify";
 import OxAvatar from "./OxAvatar.vue";
 import { useAurochsData } from "../../stores/aurochs";
 

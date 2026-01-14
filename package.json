@@ -10,5 +10,6 @@
   },
   "dependencies": {
     "core-js": "^3.22.5"
-  }
+  },
+  "packageManager": "yarn@4.12.0"
 }

@@ -1,6 +1,6 @@
 #! /bin/sh
 
-ROOT=`pwd`
+ROOT="$(pwd)"
 
 # Export env dir to env
 echo "Adding env..."

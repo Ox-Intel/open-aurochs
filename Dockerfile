@@ -1,26 +1,24 @@
-# In dev, we build these locally with `yarn watch`
+# In dev, we build JS locally with `yarn watch`
+# For production, build locally with `yarn build` before deploying
 # FROM node:18.12-slim AS js_build
-# ADD aurochs /project/aurochs
-# ADD bin /project/bin
-# 
-# WORKDIR /project
-
-# RUN  ./bin/build_js_apps.sh
-# RUN  ./bin/build_public_apps.sh
+# ADD aurochs /app/aurochs
+# ADD bin /app/bin
+# WORKDIR /app
+# RUN ./bin/build_js_apps.sh
 
 FROM python:3.12.7-slim
 MAINTAINER Steven Skoczen <steven@oxintel.ai>
 
 # Add files
-ADD bin /project/bin
+ADD bin /app/bin
 
-WORKDIR /project
+WORKDIR /app
 
-# COPY --from=js_build /project/aurochs ./aurochs
+# COPY --from=js_build /app/aurochs ./aurochs
 
 
 # Install the image os dependencies
-RUN /project/bin/docker-install.sh
+RUN /app/bin/docker-install.sh
 
 RUN export DEBIAN_FRONTEND=noninteractive
 
@@ -45,15 +43,15 @@ RUN apt-get update && apt-get install -y \
 RUN ln -fs /usr/share/zoneinfo/UTC /etc/localtime; dpkg-reconfigure --frontend noninteractive tzdata
 
 # Set up reqs
-ADD requirements.txt /project/requirements.txt
-RUN pip install -r /project/requirements.txt
+ADD requirements.txt /app/requirements.txt
+RUN pip install -r /app/requirements.txt
 
 # Add procfile (for honcho)
-ADD Procfile.dev /project/Procfile.dev
-ADD manage.py /project/manage.py
+ADD Procfile.dev /app/Procfile.dev
+ADD manage.py /app/manage.py
 
 # Explicitly add the env
-ADD .env /project/.env
+ADD .env /app/.env
 
 # Build apps and collect static
 # RUN export $(grep -v '^#' /project/.env | xargs -d '\n') && /project/bin/build_and_cleanup.sh

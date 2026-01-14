@@ -239,7 +239,7 @@
 import "regenerator-runtime/runtime";
 import platform from "platform-detect";
 import { ref } from "vue";
-import * as DOMPurify from "dompurify";
+import DOMPurify from "dompurify";
 import OxLogo from "../logo/OxLogo";
 import OxObjectIcon from "../common/icons/OxObjectIcon.vue";
 import OxAvatar from "../common/OxAvatar.vue";
