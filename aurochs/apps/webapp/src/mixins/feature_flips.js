@@ -4,6 +4,7 @@ export const featureFlipApp = function (app) {
   // AIRGAPPED FEATURE FLIP
   if (window?.aurochs?.data?.config?.rollbar) {
     app.config.globalProperties.$rollbar = new Rollbar({
+      // eslint-disable-next-line no-undef
       accessToken: process.env.VUE_APP_ROLLBAR_CLIENT_TOKEN,
       captureUncaught: true,
       captureUnhandledRejections: true,

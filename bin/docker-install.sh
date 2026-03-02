@@ -6,9 +6,7 @@ export DEBIAN_FRONTEND=noninteractive
 
 apt-get update
 
-apt-get -y upgrade
-
-apt-get -y install tzdata libpq-dev weasyprint
+apt-get -y install tzdata libpq-dev
 
 apt-get clean
 

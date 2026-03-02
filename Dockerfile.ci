@@ -10,7 +10,7 @@ ADD bin /project/bin
 WORKDIR /project
 
 RUN  ./bin/build_js_apps.sh
-RUN  ./bin/build_public_apps.sh
+# RUN  ./bin/build_public_apps.sh
 
 FROM python:3.12.7-slim
 MAINTAINER Steven Skoczen <steven@oxintel.ai>
