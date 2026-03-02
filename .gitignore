@@ -9,10 +9,12 @@ collected_static
 node_modules
 source
 
-# Environment files (keep env.sample as template)
+# Environment files (keep samples as templates)
 .env
+.env.*
 env.*
 !env.sample
+!.env.production.sample
 
 # Packages #
 ############
