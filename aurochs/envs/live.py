@@ -2,12 +2,7 @@ import os
 import dj_database_url
 import ssl
 
-try:
-    from urllib.parse import urlparse
-except:
-    from urlparse import urlparse
-# from memcacheify import memcacheify
-from postgresify import postgresify
+from urllib.parse import urlparse
 from .common import *
 
 
@@ -39,7 +34,14 @@ STATIC_PRECOMPILER_USE_CACHE = False
 STATIC_PRECOMPILER_DISABLE_AUTO_COMPILE = True
 
 
-MIDDLEWARE += ("rollbar.contrib.django.middleware.RollbarNotifierMiddleware",)
+# Error tracking via Bugsink (self-hosted, Sentry SDK-compatible)
+if BUGSINK_DSN and BUGSINK_DSN != "not set":
+    import sentry_sdk
+    sentry_sdk.init(
+        dsn=BUGSINK_DSN,
+        traces_sample_rate=0,
+        send_default_pii=False,
+    )
 
 # TODO: Switch to SES
 # ANYMAIL = {
@@ -118,9 +120,7 @@ CACHES = {
 }
 
 
-# DATABASES = None
-DATABASES = postgresify()
-DATABASES["default"] = dj_database_url.config(conn_max_age=600, ssl_require=True)
+DATABASES = {"default": dj_database_url.config(conn_max_age=600, ssl_require=True)}
 # DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 # DEFAULT_FILE_STORAGE = "utils.storage.AurochsS3Storage"
 # STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
@@ -146,27 +146,15 @@ LOGGING = {
             ],
             "class": "django.utils.log.AdminEmailHandler",
         },
-        "rollbar": {
-            "filters": [
-                "require_debug_false",
-            ],
-            "access_token": ROLLBAR_TOKEN,
-            "environment": ROLLBAR_ENV,
-            "class": "rollbar.logger.RollbarHandler",
+        "console": {
+            "class": "logging.StreamHandler",
         },
     },
     "loggers": {
-        # "django.request": {
-        #     "handlers": [
-        #         "mail_admins",
-        #     ],
-        #     "level": "ERROR",
-        #     "propagate": True,
-        # },
         "aurochs": {
             "handlers": [
                 "mail_admins",
-                "rollbar",
+                "console",
             ],
             "level": "DEBUG",
             "propagate": True,

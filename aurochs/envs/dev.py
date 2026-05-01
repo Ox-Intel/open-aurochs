@@ -26,7 +26,6 @@ STATIC_PRECOMPILER_DISABLE_AUTO_COMPILE = True
 if "AUROCHS_BASE_URL" in os.environ:
     MEDIA_URL = "%s/media/" % os.environ["AUROCHS_BASE_URL"]
 
-MIDDLEWARE += ("rollbar.contrib.django.middleware.RollbarNotifierMiddleware",)
 # INSTALLED_APPS += ['debug_toolbar', ]
 
 INTERNAL_IPS = [

@@ -7,6 +7,7 @@ from django.urls import path, re_path
 from django.contrib.auth import views as auth_views
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.conf import settings
+from django.http import HttpResponse
 from django.views.static import serve
 from utils.auth import (
     AurochsPasswordResetView,
@@ -21,7 +22,31 @@ admin.site.site_header = "Ox Admin"
 admin.site.site_title = "Ox Admin Portal"
 admin.site.index_title = "Welcome to Ox Admin Portal"
 
+ROBOTS_TXT = """\
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ChatGPT-User
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: *
+Disallow: /files/
+Allow: /
+"""
+
+
+def robots_txt(request):
+    return HttpResponse(ROBOTS_TXT, content_type="text/plain")
+
+
 urlpatterns = [
+    path("robots.txt", robots_txt, name="robots_txt"),
     re_path(r"^", include(("webapp.urls", "webapp"), namespace="webapp")),
     # re_path(r"^public/", include(("public.urls", "public"), namespace="public")),
     re_path(r"^", include(("files.urls", "files"), namespace="files")),

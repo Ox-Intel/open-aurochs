@@ -10,7 +10,7 @@ import re
 import subprocess
 import time
 import traceback
-import PyPDF2
+import pypdf
 
 # import pdfplumber
 from concurrent.futures import ThreadPoolExecutor
@@ -26,11 +26,11 @@ from pdf2image import convert_from_bytes
 from pytesseract import image_to_string
 from docx2python import docx2python
 
-from langchain.prompts import PromptTemplate
+from langchain_core.prompts import PromptTemplate
 from langchain_openai import OpenAI
 from langchain.chains import LLMChain
 from langchain_openai import ChatOpenAI
-from langchain.schema import AIMessage, HumanMessage, SystemMessage
+from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 from langchain_community.agent_toolkits.load_tools import load_tools
 from langchain.agents import initialize_agent
 from langchain.agents import AgentType
@@ -63,18 +63,8 @@ from history.models import ObjectHistoryChange
 
 metaphor = Metaphor(settings.METAPHOR_KEY)
 
-# GPT-3.5
-GPT_MODEL = "gpt-3.5-turbo"
-GPT_LARGE_CONTEXT_MODEL = "gpt-3.5-turbo-16k"
-
-# GPT-4
-# GPT_MODEL = "gpt-4"
-# GPT_LARGE_CONTEXT_MODEL = "gpt-4-32k"
-# GPT_LARGE_CONTEXT_MODEL = "gpt-4"
-
-# GPT-4o
-GPT_MODEL = "gpt-4o"
-GPT_LARGE_CONTEXT_MODEL = "gpt-4o-mini"
+GPT_MODEL = "gpt-5.5"
+GPT_LARGE_CONTEXT_MODEL = "gpt-5.4-nano"
 
 
 PAGE_CONTENT_CUTOFF = 10000
@@ -141,7 +131,7 @@ def chunk_string(s, chunk_size=14000):
 
 
 def research_chunk(chunk_info):
-    summarize_context_chat = ChatOpenAI(temperature=0.1, model=GPT_LARGE_CONTEXT_MODEL)
+    summarize_context_chat = ChatOpenAI(model=GPT_LARGE_CONTEXT_MODEL)
     chunk, chunk_num, num_chunks, question, user_channel_id, gpt_guid = chunk_info
     time.sleep(chunk_num / num_chunks)
 
@@ -481,7 +471,7 @@ def score_single_criteria_url(pairs):
             question_context = f", in the context of {question}"
 
         source_context = f"The source below has page summaries from {context}"
-        chat = ChatOpenAI(temperature=0.2, model=GPT_MODEL)
+        chat = ChatOpenAI(model=GPT_MODEL)
         messages = [
             SystemMessage(content=content),
             HumanMessage(
@@ -547,7 +537,7 @@ def score_single_criteria_topic(pairs):
             # ]
             # print(chat.invoke(messages).content)
 
-            chat = ChatOpenAI(temperature=0.1, model="gpt-4")
+            chat = ChatOpenAI(model=GPT_MODEL)
             prompt = f"""Evaluate how strongly {topic} scores for the criteria {name} (e.g {description}), in a framework focused on {question}. {context}.  Focus only on {name}, not related criteria or ideas, nor how important {name} is to deciding {question}.  Please return a list in the format below with the following keys: score, comment, skipped. Be accurate with your scores, and don't be afraid to use the full numerical range.  If you don't have enough information to answer, please return True for skipped.   For score, please return a single number between 0 and 10, where where 0 is not supported and 10 is completely supported.
 
 Assume that {topic} is a real thing, not a speculative idea or thought experiment.  Please use only your knowledge of the world and the context above to answer the prompt.  If you don't have any information about {topic} and how it scores for {name}, please say that you don't know, return skipped as True, and return a score of -1.
@@ -723,7 +713,7 @@ def score_single_criteria_all_subjects(pairs):
         description = c["description"]
         subjects_string = "\n".join(subjects)
 
-        chat = ChatOpenAI(temperature=0.2, model=GPT_LARGE_CONTEXT_MODEL)
+        chat = ChatOpenAI(model=GPT_LARGE_CONTEXT_MODEL)
         prompt = f"""Ok.  So given that context, write a summary of how strongly the following list of subjects would score for the criteria {name} (e.g {description}), in a framework focused on "{question}". {context}.  Focus only on {name}, not related criteria or ideas, nor how important {name} is to "{question}".  Please compare the subjects against each other to achieve an accurate scoring for all. Do not use the order of subjects to weight your judgement.
 
 Subjects: {subjects_string}
@@ -752,8 +742,7 @@ Structure the list like this:
         # print("summary_response")
         # print(summary_response)
 
-        chat = ChatOpenAI(temperature=0.1, model="gpt-4")
-        # chat = ChatOpenAI(temperature=0.1, model=GPT_MODEL)
+        chat = ChatOpenAI(model=GPT_MODEL)
         prompt = f"""Here is some context for the following question:
 Evaluation of {name} for each subject:
 {summary_response}
@@ -918,7 +907,7 @@ When replying, please use the following format, separating each field by a line 
         #             score["confidence"] = confidence_scores[count].split(". ")[1]
         #             count += 1
 
-        chat = ChatOpenAI(temperature=0.1, model="gpt-4")
+        chat = ChatOpenAI(model=GPT_MODEL)
 
         prompt = f"""Below is a list of topics and descriptive sentences.
 For each topic, evaluate the descriptive sentence, based on your real-world knowledge about {name} in the context of {question} and the sentence content, and return a score of how speculative that sentence is, where 0 is entirely based on real facts, and 10 is highly speculative and fabricated without evidence.
@@ -1040,7 +1029,7 @@ def score_single_criteria_single_subjects(pairs):
         description = c["description"]
         subjects_string = "\n".join(subjects)
 
-        chat = ChatOpenAI(temperature=0.2, model=GPT_LARGE_CONTEXT_MODEL)
+        chat = ChatOpenAI(model=GPT_LARGE_CONTEXT_MODEL)
 
         prompt = f"""Evaluate how strongly the following list of subjects score for the criteria {name} (e.g {description}), in a framework focused on "{question}". {context}.  Focus only on {name}, not related criteria or ideas, nor how important {name} is to "{question}".  Please compare the subjects against each other to achieve an accurate scoring for all. Do not use the order of subjects to weight your judgement.  Please return a list in the format below with the following keys: score, comment, skipped, speculation. Be accurate with your scores, and don't be afraid to use the full numerical range.  If you don't have enough information to answer, please return True for skipped.   For score, please return a single number between 0 and 10, where where 0 is not supported and 10 is completely supported.  For speculation, please return a score of how speculative the sentence is, where 0 is highly speculative, and 10 is not at all speculative.
 
@@ -1202,7 +1191,7 @@ When replying, please use the following format, separating each field by a line 
         #             score["confidence"] = confidence_scores[count].split(". ")[1]
         #             count += 1
 
-        chat = ChatOpenAI(temperature=0.1, model=GPT_MODEL)
+        chat = ChatOpenAI(model=GPT_MODEL)
 
         prompt = f"""Below is a list of topics and descriptive sentences.
 For each topic, evaluate the descriptive sentence, based on your real-world knowledge about {name} in the context of {question} and the sentence content, and return a score of how speculative that sentence is, where 0 is entirely based on real facts, and 10 is highly speculative.
@@ -1335,7 +1324,7 @@ def oxgpt_generate_framework(data, user_channel_id):
     #         else:
     #             topics.append(s)
 
-    chat = ChatOpenAI(temperature=0.4, model=GPT_MODEL)
+    chat = ChatOpenAI(model=GPT_MODEL)
     messages = [
         SystemMessage(
             content="You are an expert AI, tasked with generating accurate and complete frameworks to aid in human decision-making.  You only return python lists."
@@ -1553,7 +1542,7 @@ def oxgpt_analyze_subjects(data, user_channel_id):
 
     use_precise = False
     if source_search or source_news:
-        chat = ChatOpenAI(temperature=0.2, model=GPT_MODEL)
+        chat = ChatOpenAI(model=GPT_MODEL)
         messages = [
             HumanMessage(
                 # content=f"Please make a bulleted list of the 4-8 most important criteria for {question}. {framework_context}. Do not number the list, or put parenthesis around any scores. Please also add to each criteria a number between 1 and 10 indicating how important this criteria is, where 1 is not important and 10 is very important. Please include a short explanation of each criteria.  Please return the criteria as a python list, with each item being a dictionary with keys for the name, weight, and description. The keys should be lowercase, and the dictionary should be valid python. Do not include any other commentary or code fences.  Explanations should be concise, no more than one sentence, and phrased as a question where a yes would score highly and a no would score lowly."
@@ -1687,7 +1676,7 @@ def oxgpt_analyze_subjects(data, user_channel_id):
         else:
             try:
                 full_domains = NEWS_DOMAINS
-                news_chat = ChatOpenAI(temperature=0.2, model=GPT_MODEL)
+                news_chat = ChatOpenAI(model=GPT_MODEL)
                 messages = [
                     HumanMessage(
                         # content=f"Please make a bulleted list of the 4-8 most important criteria for {question}. {framework_context}. Do not number the list, or put parenthesis around any scores. Please also add to each criteria a number between 1 and 10 indicating how important this criteria is, where 1 is not important and 10 is very important. Please include a short explanation of each criteria.  Please return the criteria as a python list, with each item being a dictionary with keys for the name, weight, and description. The keys should be lowercase, and the dictionary should be valid python. Do not include any other commentary or code fences.  Explanations should be concise, no more than one sentence, and phrased as a question where a yes would score highly and a no would score lowly."
@@ -1793,7 +1782,7 @@ def oxgpt_analyze_subjects(data, user_channel_id):
                     f"Error doing non-precise keyword search for {question} for {subjects_string}"
                 )
         else:
-            chat = ChatOpenAI(temperature=0.2, model=GPT_MODEL)
+            chat = ChatOpenAI(model=GPT_MODEL)
             messages = [
                 HumanMessage(
                     # content=f"Please make a bulleted list of the 4-8 most important criteria for {question}. {framework_context}. Do not number the list, or put parenthesis around any scores. Please also add to each criteria a number between 1 and 10 indicating how important this criteria is, where 1 is not important and 10 is very important. Please include a short explanation of each criteria.  Please return the criteria as a python list, with each item being a dictionary with keys for the name, weight, and description. The keys should be lowercase, and the dictionary should be valid python. Do not include any other commentary or code fences.  Explanations should be concise, no more than one sentence, and phrased as a question where a yes would score highly and a no would score lowly."
@@ -2183,13 +2172,13 @@ def oxgpt_generate_subjects(data, user_channel_id):
     #     criteria_list += f"- {c['name']}\n"
 
     if smart_generation:
-        chat = ChatOpenAI(temperature=0.7, model=GPT_LARGE_CONTEXT_MODEL)
+        chat = ChatOpenAI(model=GPT_LARGE_CONTEXT_MODEL)
         messages = [
             SystemMessage(
                 content="You are a creative AI, tasked with generating options for a given question, by using the context below."
             ),
         ]
-        summarize_chat = ChatOpenAI(temperature=0.2, model="gpt-4")
+        summarize_chat = ChatOpenAI(model=GPT_LARGE_CONTEXT_MODEL)
         year = datetime.datetime.now().year
         search_string = summarize_chat(
             [
@@ -2291,7 +2280,7 @@ def oxgpt_generate_subjects(data, user_channel_id):
             ),
         )
     else:
-        chat = ChatOpenAI(temperature=0.7, model=GPT_MODEL)
+        chat = ChatOpenAI(model=GPT_MODEL)
         messages = [
             SystemMessage(
                 content="You are a creative AI, tasked with generating options for a given question, by using the context below."
@@ -2338,7 +2327,7 @@ def oxgpt_generate_more_criteria(data, user_channel_id):
     for c in previous_criteria:
         criteria_list += f"- {c['name']}\n"
 
-    chat = ChatOpenAI(temperature=0.9, model=GPT_MODEL)
+    chat = ChatOpenAI(model=GPT_MODEL)
     messages = [
         SystemMessage(
             content="You are an expert AI, tasked with generating accurate and complete frameworks to aid in human decision-making. You only return python lists."
@@ -2483,7 +2472,7 @@ def oxgpt_analyze_file(data, user_channel_id):
 
         # PyPDF2
         pdf_buffer = io.BytesIO(b64content)
-        pdf_reader = PyPDF2.PdfReader(pdf_buffer)
+        pdf_reader = pypdf.PdfReader(pdf_buffer)
         pypdf_text = ""
 
         for page in pdf_reader.pages:

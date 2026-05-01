@@ -1,25 +1,22 @@
-import Rollbar from "rollbar";
+import * as Sentry from "@sentry/vue";
 
 export const featureFlipApp = function (app) {
   // AIRGAPPED FEATURE FLIP
-  if (window?.aurochs?.data?.config?.rollbar) {
-    app.config.globalProperties.$rollbar = new Rollbar({
-      // eslint-disable-next-line no-undef
-      accessToken: process.env.VUE_APP_ROLLBAR_CLIENT_TOKEN,
-      captureUncaught: true,
-      captureUnhandledRejections: true,
-      payload: {
-        // Track your events to a specific version of code for better visibility into version health
-        code_version: "1.0.0",
-        // Add custom data to your events by adding custom key/value pairs like the one below
-        custom_data: "foo",
+  if (window?.aurochs?.data?.config?.bugsink_dsn) {
+    Sentry.init({
+      app,
+      dsn: window.aurochs.data.config.bugsink_dsn,
+      tunnel: "/api/error-handling/",
+      tracesSampleRate: 0,
+      sendDefaultPii: false,
+      beforeSend(event) {
+        const ua = navigator.userAgent || "";
+        if (/bot|crawl|spider|slurp|bingpreview|mediapartners|google|baidu|yandex|duckduck|facebookexternalhit|linkedinbot|twitterbot|applebot|semrush|ahrefs|mj12bot|dotbot|petalbot|bytespider|gptbot|claudebot/i.test(ua)) {
+          return null;
+        }
+        return event;
       },
     });
-    app.config.errorHandler = (err, vm) => {
-      // , info param
-      vm.$rollbar.error(err);
-      throw err; // rethrow
-    };
   }
   // END AIRGAPPED FEATURE FLIP
   return app;

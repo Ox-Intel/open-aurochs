@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.core.cache import cache
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
 from django.http import (
     HttpResponse,
     Http404,
@@ -28,6 +29,7 @@ from files.models import UploadedFile
 
 @ajax_request
 @csrf_exempt
+@require_POST
 def upload(request):
     object_pk = request.POST["ox_id"]
     object_type = request.POST["object_type"]

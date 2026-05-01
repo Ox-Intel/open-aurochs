@@ -8,6 +8,9 @@ mkdir -p aurochs/apps/webapp/static/dist
 echo "Building vue app..."
 cd "$ROOT/aurochs/apps/webapp"
 
+# Enable corepack so Node uses the yarn version from package.json
+corepack enable
+
 # Remove yarnPath from .yarnrc.yml if it exists (the file is gitignored)
 # This allows yarn set version to work without the missing release file
 if [ -f .yarnrc.yml ]; then

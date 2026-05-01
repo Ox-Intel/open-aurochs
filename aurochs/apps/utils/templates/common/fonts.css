@@ -63,37 +63,37 @@
 	/* Italics  */
 	@font-face {
 	font-family:"acf";
-	src:url("{{ request.scheme }}://{{ request.get_host }}/static/common/fonts/acf-a9533d-b9f41-l.woff2") format("woff2"),url("{{ request.scheme }}://{{ request.get_host }}/static/common/fonts/acf-a9533d-b9f41-d.woff") format("woff"),url("{{ request.scheme }}://{{ request.get_host }}/static/common/fonts/acf-a9533d-b9f41-a.opentype") format("opentype");
+	src:url("{{ request.scheme }}://{{ request.get_host }}/static/common/fonts/acf-a9533d-4b9f41-l.woff2") format("woff2"),url("{{ request.scheme }}://{{ request.get_host }}/static/common/fonts/acf-a9533d-4b9f41-d.woff") format("woff"),url("{{ request.scheme }}://{{ request.get_host }}/static/common/fonts/acf-a9533d-4b9f41-a.opentype") format("opentype");
 	font-display:auto;font-style:italic;font-weight:800;font-stretch:normal;
 	}
 	
 	@font-face {
 	font-family:"acf";
-	src:url("{{ request.scheme }}://{{ request.get_host }}/static/common/fonts/acf-034236-b9f42-l.woff2") format("woff2"),url("{{ request.scheme }}://{{ request.get_host }}/static/common/fonts/acf-034236-b9f42-d.woff") format("woff"),url("{{ request.scheme }}://{{ request.get_host }}/static/common/fonts/acf-034236-b9f42-a.opentype") format("opentype");
+	src:url("{{ request.scheme }}://{{ request.get_host }}/static/common/fonts/acf-034236-4b9f42-l.woff2") format("woff2"),url("{{ request.scheme }}://{{ request.get_host }}/static/common/fonts/acf-034236-4b9f42-d.woff") format("woff"),url("{{ request.scheme }}://{{ request.get_host }}/static/common/fonts/acf-034236-4b9f42-a.opentype") format("opentype");
 	font-display:auto;font-style:italic;font-weight:700;font-stretch:normal;
 	}
 	
 	@font-face {
 	font-family:"acf";
-	src:url("{{ request.scheme }}://{{ request.get_host }}/static/common/fonts/acf-47e39f-b9f43-l.woff2") format("woff2"),url("{{ request.scheme }}://{{ request.get_host }}/static/common/fonts/acf-47e39f-b9f43-d.woff") format("woff"),url("{{ request.scheme }}://{{ request.get_host }}/static/common/fonts/acf-47e39f-b9f43-a.opentype") format("opentype");
+	src:url("{{ request.scheme }}://{{ request.get_host }}/static/common/fonts/acf-47e39f-4b9f43-l.woff2") format("woff2"),url("{{ request.scheme }}://{{ request.get_host }}/static/common/fonts/acf-47e39f-4b9f43-d.woff") format("woff"),url("{{ request.scheme }}://{{ request.get_host }}/static/common/fonts/acf-47e39f-4b9f43-a.opentype") format("opentype");
 	font-display:auto;font-style:italic;font-weight:900;font-stretch:normal;
 	}
 	
 	@font-face {
 	font-family:"acf";
-	src:url("{{ request.scheme }}://{{ request.get_host }}/static/common/fonts/acf-2b2f52-b9f44-l.woff2") format("woff2"),url("{{ request.scheme }}://{{ request.get_host }}/static/common/fonts/acf-2b2f52-b9f44-d.woff") format("woff"),url("{{ request.scheme }}://{{ request.get_host }}/static/common/fonts/acf-2b2f52-b9f44-a.opentype") format("opentype");
+	src:url("{{ request.scheme }}://{{ request.get_host }}/static/common/fonts/acf-2b2f52-4b9f44-l.woff2") format("woff2"),url("{{ request.scheme }}://{{ request.get_host }}/static/common/fonts/acf-2b2f52-4b9f44-d.woff") format("woff"),url("{{ request.scheme }}://{{ request.get_host }}/static/common/fonts/acf-2b2f52-4b9f44-a.opentype") format("opentype");
 	font-display:auto;font-style:italic;font-weight:200;font-stretch:normal;
 	}
 	
 	@font-face {
 	font-family:"acf";
-	src:url("{{ request.scheme }}://{{ request.get_host }}/static/common/fonts/acf-efd111-b9f46-l.woff2") format("woff2"),url("{{ request.scheme }}://{{ request.get_host }}/static/common/fonts/acf-efd111-b9f46-d.woff") format("woff"),url("{{ request.scheme }}://{{ request.get_host }}/static/common/fonts/acf-efd111-b9f46-a.opentype") format("opentype");
+	src:url("{{ request.scheme }}://{{ request.get_host }}/static/common/fonts/acf-efd111-4b9f46-l.woff2") format("woff2"),url("{{ request.scheme }}://{{ request.get_host }}/static/common/fonts/acf-efd111-4b9f46-d.woff") format("woff"),url("{{ request.scheme }}://{{ request.get_host }}/static/common/fonts/acf-efd111-4b9f46-a.opentype") format("opentype");
 	font-display:auto;font-style:italic;font-weight:300;font-stretch:normal;
 	}
 	
 	@font-face {
 	font-family:"acf";
-	src:url("{{ request.scheme }}://{{ request.get_host }}/static/common/fonts/acf-072efe-b9f47-l.woff2") format("woff2"),url("{{ request.scheme }}://{{ request.get_host }}/static/common/fonts/acf-072efe-b9f47-d.woff") format("woff"),url("{{ request.scheme }}://{{ request.get_host }}/static/common/fonts/acf-072efe-b9f47-a.opentype") format("opentype");
+	src:url("{{ request.scheme }}://{{ request.get_host }}/static/common/fonts/acf-072efe-4b9f47-l.woff2") format("woff2"),url("{{ request.scheme }}://{{ request.get_host }}/static/common/fonts/acf-072efe-4b9f47-d.woff") format("woff"),url("{{ request.scheme }}://{{ request.get_host }}/static/common/fonts/acf-072efe-4b9f47-a.opentype") format("opentype");
 	font-display:auto;font-style:italic;font-weight:600;font-stretch:normal;
 	}
 	
@@ -105,19 +105,19 @@
 	
 	@font-face {
 	font-family:"acf";
-	src:url("{{ request.scheme }}://{{ request.get_host }}/static/common/fonts/acf-e86dc2-b9f49-l.woff2") format("woff2"),url("{{ request.scheme }}://{{ request.get_host }}/static/common/fonts/acf-e86dc2-b9f49-d.woff") format("woff"),url("{{ request.scheme }}://{{ request.get_host }}/static/common/fonts/acf-e86dc2-b9f49-a.opentype") format("opentype");
+	src:url("{{ request.scheme }}://{{ request.get_host }}/static/common/fonts/acf-e86dc2-4b9f49-l.woff2") format("woff2"),url("{{ request.scheme }}://{{ request.get_host }}/static/common/fonts/acf-e86dc2-4b9f49-d.woff") format("woff"),url("{{ request.scheme }}://{{ request.get_host }}/static/common/fonts/acf-e86dc2-4b9f49-a.opentype") format("opentype");
 	font-display:auto;font-style:italic;font-weight:500;font-stretch:normal;
 	}
 	
 	@font-face {
 	font-family:"acf";
-	src:url("{{ request.scheme }}://{{ request.get_host }}/static/common/fonts/acf-6dc53a-b9f4a-l.woff2") format("woff2"),url("{{ request.scheme }}://{{ request.get_host }}/static/common/fonts/acf-6dc53a-b9f4a-d.woff") format("woff"),url("{{ request.scheme }}://{{ request.get_host }}/static/common/fonts/acf-6dc53a-b9f4a-a.opentype") format("opentype");
+	src:url("{{ request.scheme }}://{{ request.get_host }}/static/common/fonts/acf-6dc53a-4b9f4a-l.woff2") format("woff2"),url("{{ request.scheme }}://{{ request.get_host }}/static/common/fonts/acf-6dc53a-4b9f4a-d.woff") format("woff"),url("{{ request.scheme }}://{{ request.get_host }}/static/common/fonts/acf-6dc53a-4b9f4a-a.opentype") format("opentype");
 	font-display:auto;font-style:italic;font-weight:100;font-stretch:normal;
 	}
 	
 	@font-face {
 font-family:"articulat-heavy-cf";
-src:url("{{ request.scheme }}://{{ request.get_host }}/static/common/fonts/acf-028cec-b9f45-l.woff2") format("woff2"),url("{{ request.scheme }}://{{ request.get_host }}/static/common/fonts/acf-028cec-b9f45-d.woff") format("woff"),url("{{ request.scheme }}://{{ request.get_host }}/static/common/fonts/acf-028cec-b9f45-a.opentype") format("opentype");
+src:url("{{ request.scheme }}://{{ request.get_host }}/static/common/fonts/acf-028cec-4b9f45-l.woff2") format("woff2"),url("{{ request.scheme }}://{{ request.get_host }}/static/common/fonts/acf-028cec-4b9f45-d.woff") format("woff"),url("{{ request.scheme }}://{{ request.get_host }}/static/common/fonts/acf-028cec-4b9f45-a.opentype") format("opentype");
 font-display:auto;font-style:italic;font-weight:900;font-stretch:normal;
 }
 </style>

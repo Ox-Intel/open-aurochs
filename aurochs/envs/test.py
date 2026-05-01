@@ -9,6 +9,9 @@ try:
 except:
     pass
 
+# django-debug-toolbar 6.x blocks tests by default
+DEBUG_TOOLBAR_CONFIG = {"IS_RUNNING_TESTS": False}
+
 redis_url = urlparse(CELERY_BROKER_URL)
 CACHES = {
     "default": {
@@ -21,5 +24,3 @@ CACHES = {
         "KEY_PREFIX": "UNITTESTS",
     }
 }
-
-# MIDDLEWARE += ("rollbar.contrib.django.middleware.RollbarNotifierMiddleware",)

@@ -155,9 +155,9 @@ class BaseEventHandler:
                 and not settings.TEST_MODE
                 and not settings.DEV_MODE
             ):
-                import rollbar
+                import sentry_sdk
 
-                rollbar.report_exc_info()
+                sentry_sdk.capture_exception()
             return json.dumps({"success": False, "error_message": "Server error."})
         return json.dumps({"success": False, "error_message": "Missing event handler."})
 

@@ -1207,7 +1207,7 @@ class HasJWTMixin(object):
             },
             settings.JWT_SECRET,
             algorithm="HS256",
-        ).decode()
+        )
 
         return self.api_jwt_cached
 

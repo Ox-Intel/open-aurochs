@@ -20,7 +20,7 @@
     {% include "webapp/_root_urls.html" %}
     window.aurochs.data = window.aurochs.data || {};
     {{js_data}}
-    window.aurochs.data.config = {'use_24_hour': {{use_24_hour_times}}, 'rollbar': {{enable_rollbar|lower}}, 'ws_path': "{{ WS_DOMAIN }}/ws/p/{{session_id}}/", 'file_path': "{{PAGE_DOMAIN}}{% url 'files:upload' %}", 'guide_image_url': '{{ request.scheme }}://{{ request.get_host }}{% static "images/guide/intel.jpg" %}'};
+    window.aurochs.data.config = {'use_24_hour': {{use_24_hour_times}}, 'bugsink_dsn': '{{ bugsink_dsn }}', 'ws_path': "{{ WS_DOMAIN }}/ws/p/{{session_id}}/", 'file_path': "{{PAGE_DOMAIN}}{% url 'files:upload' %}", 'guide_image_url': '{{ request.scheme }}://{{ request.get_host }}{% static "images/guide/intel.jpg" %}'};
     {% if request.user.is_authenticated %}window.aurochs.data.user = window.aurochs.data.users['{{request.user.ox_id}}'];
     window.aurochs.data.userPool = {
      {% for u in all_users %}"{{u.ox_id}}": {"id":"{{u.ox_id}}","full_name":"{{u.first_name}} {{u.last_name}}","display":"{{u.first_name}} {{u.last_name}} ({{u.username}})"}{% if not forloop.last %},{% endif %}{% endfor %}

@@ -42,7 +42,7 @@ langchain-community==0.3.13
 metaphor_python==0.1.10
 mock==4.0.3
 openai==0.27.7
-rollbar==0.16.3
+sentry-sdk[django]
 Pillow==10.0.1
 piprot==0.9.11
 polytester==1.2.3

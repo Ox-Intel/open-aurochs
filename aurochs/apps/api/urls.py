@@ -2,8 +2,11 @@ from django.urls import path
 from django.views.generic.base import RedirectView
 
 from api import views
+from api.views_tunnel import bugsink_tunnel
 
 urlpatterns = [
+    # Bugsink error tunnel (bypasses ad blockers)
+    path("api/error-handling/", bugsink_tunnel, name="bugsink_tunnel"),
     # ...
     path("event/", views.event, name="event"),
     path(

@@ -39,10 +39,7 @@ def app_home_handler(request):
     return {
         "js_data": js_data,
         "session_id": session_id,
-        "enable_rollbar": not settings.AIRGAPPED
-        and not settings.DEBUG
-        and not settings.TEST_MODE
-        and not settings.DEV_MODE,
+        "bugsink_dsn": getattr(settings, "BUGSINK_DSN", ""),
         "use_24_hour_times": use_24_hour_times,
         "all_users": User.objects.values(
             "ox_id", "first_name", "last_name", "username"

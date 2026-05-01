@@ -1,3 +1,4 @@
+import datetime
 import json
 import mock
 import unittest
@@ -43,9 +44,9 @@ class EventTestCase(TestCase):
     def assertBasicallyEqualTimes(self, t1, t2):  # noqa
         # self.assertEqual(t1.tzinfo, t2.tzinfo)
         if not t1.tzinfo:
-            t1 = t1.replace(tzinfo=timezone.utc)
+            t1 = t1.replace(tzinfo=datetime.timezone.utc)
         if not t2.tzinfo:
-            t2 = t2.replace(tzinfo=timezone.utc)
+            t2 = t2.replace(tzinfo=datetime.timezone.utc)
         diff = abs((t2 - t1).total_seconds())
         self.assertTrue(diff < 6)
 

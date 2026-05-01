@@ -1,6 +1,5 @@
-FROM node:18.12-slim AS js_build
+FROM node:22-slim AS js_build
 
-# Accept build args for npm tokens (FontAwesome Pro)
 ARG FONTAWESOME_NPM_TOKEN
 ENV FONTAWESOME_NPM_TOKEN=${FONTAWESOME_NPM_TOKEN}
 
@@ -8,55 +7,76 @@ ADD aurochs /project/aurochs
 ADD bin /project/bin
 
 WORKDIR /project
+RUN ./bin/build_js_apps.sh
 
-RUN  ./bin/build_js_apps.sh
-# RUN  ./bin/build_public_apps.sh
+FROM python:3.12-slim
 
-FROM python:3.12.7-slim
-MAINTAINER Steven Skoczen <steven@oxintel.ai>
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
 
-# Add files
-ADD bin /project/bin
-
-WORKDIR /project
-
-COPY --from=js_build /project/aurochs ./aurochs
-
-# Install the image os dependencies
-RUN /project/bin/docker-install.sh
-
-RUN export DEBIAN_FRONTEND=noninteractive
-
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
     tzdata \
     curl \
-    npm \
+    libpq5 \
     libpq-dev \
     python3-cffi \
     python3-brotli \
     libpango-1.0-0 \
     libharfbuzz0b \
-    libpangoft2-1.0-0
+    libpangoft2-1.0-0 \
+    tesseract-ocr \
+    poppler-utils \
+    libmagic-dev \
+    && rm -rf /var/lib/apt/lists/*
 
+RUN ln -fs /usr/share/zoneinfo/UTC /etc/localtime && \
+    dpkg-reconfigure --frontend noninteractive tzdata
 
-# Handle tzdata in non-interative mode.
-RUN ln -fs /usr/share/zoneinfo/UTC /etc/localtime; dpkg-reconfigure --frontend noninteractive tzdata
+WORKDIR /project
 
-# Set up reqs
-ADD requirements.txt /project/requirements.txt
-RUN pip install -r /project/requirements.txt
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Add procfile (for honcho)
-ADD Procfile.dev /project/Procfile
-ADD manage.py /project/manage.py
+# Remove build tools (only needed for pip install)
+RUN apt-get purge -y --auto-remove build-essential && rm -rf /var/lib/apt/lists/*
 
-# Explicitly add the env
-ADD .env /project/.env
+COPY --from=js_build /project/aurochs ./aurochs
+COPY --from=js_build /project/bin ./bin
+COPY manage.py ./
 
-# Build apps and collect static
-RUN export $(grep -v '^#' /project/.env | xargs -d '\n') && /project/bin/build_and_cleanup.sh
+# Collect static with dummy env vars (no secrets baked into image)
+RUN DJANGO_SETTINGS_MODULE=aurochs.envs.production \
+    DJANGO_SECRET_KEY=build-placeholder \
+    AUROCHS_FRIENDLY_NAME=build \
+    AUROCHS_NAMESPACE=build \
+    AUROCHS_ENCRYPTION_KEY=build-placeholder-key \
+    AUROCHS_ENCRYPTION_SALT=build-placeholder-salt \
+    AUROCHS_DOMAIN=localhost \
+    AUROCHS_ADMIN_NAME=build \
+    AUROCHS_ADMIN_EMAIL=build@localhost \
+    AUROCHS_FROM_EMAIL=build@localhost \
+    DATABASE_URL=sqlite:///tmp/build.db \
+    python manage.py collectstatic --noinput 2>/dev/null || true
 
-# Set the environment vars and start the server
-CMD honcho start -f Procfile
+# Clean up JS build artifacts, source maps, and test files
+RUN rm -rf aurochs/apps/webapp/.yarn \
+    aurochs/apps/webapp/node_modules \
+    aurochs/apps/public/.yarn \
+    aurochs/apps/public/node_modules \
+    node_modules \
+    collected_static/client/static/js/*.map \
+    collected_static/client/static/js/*.map.br \
+    collected_static/client/static/js/*.map.gz \
+    collected_static/client/js/*.map \
+    collected_static/client/js/*.map.br \
+    collected_static/client/js/*.map.gz \
+    cypress postman tests
 
-EXPOSE 8120
+RUN groupadd -r appuser && useradd -r -g appuser appuser && \
+    chown -R appuser:appuser /project
+USER appuser
+
+EXPOSE 8000
+
+CMD ["uvicorn", "aurochs.asgi:application", "--host", "0.0.0.0", "--port", "8000", "--workers", "4"]

@@ -41,7 +41,14 @@ DEFAULT_FILE_STORAGE = "utils.storage.AurochsFileStorage"
 STATIC_PRECOMPILER_USE_CACHE = False
 STATIC_PRECOMPILER_DISABLE_AUTO_COMPILE = True
 
-MIDDLEWARE += ("rollbar.contrib.django.middleware.RollbarNotifierMiddleware",)
+# Error tracking via Bugsink (self-hosted, Sentry SDK-compatible)
+if BUGSINK_DSN and BUGSINK_DSN != "not set":
+    import sentry_sdk
+    sentry_sdk.init(
+        dsn=BUGSINK_DSN,
+        traces_sample_rate=0,
+        send_default_pii=False,
+    )
 
 # Email configuration (using Amazon SES)
 ANYMAIL = {

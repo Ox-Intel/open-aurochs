@@ -141,13 +141,13 @@ CACHES = {
 }
 
 MIDDLEWARE = [
+    "aurochs.health.HealthCheckMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     # 'django_hosts.middleware.HostsRequestMiddleware',
     # 'django.middleware.cache.UpdateCacheMiddleware',
     # "inkdots.middleware.InkDotsMiddleware",
     # "django.middleware.gzip.GZipMiddleware",
-    "django_brotli.middleware.BrotliMiddleware",
-    "htmlmin.middleware.HtmlMinifyMiddleware",
+    "utils.middleware.SafeBrotliMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -161,7 +161,7 @@ MIDDLEWARE = [
     # 'django.contrib.messages.middleware.MessageMiddleware',
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     # 'django.middleware.cache.FetchFromCacheMiddleware',
-    "htmlmin.middleware.MarkRequestMiddleware",
+    "django_minify_html.middleware.MinifyHtmlMiddleware",
     # 'django_hosts.middleware.HostsResponseMiddleware',
 ]
 IGNORABLE_404_URLS = [
@@ -207,7 +207,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 # Database
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "ENGINE": "django.db.backends.postgresql",
         "NAME": POSTGRES_DB,
         "USER": POSTGRES_USER,
         "PASSWORD": POSTGRES_PASSWORD,
@@ -217,7 +217,7 @@ DATABASES = {
 }
 if "CIRCLECI" in os.environ:
     DATABASES["default"] = {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "ENGINE": "django.db.backends.postgresql",
         "NAME": "circle_test",
         "USER": "ubuntu",
     }
@@ -309,7 +309,6 @@ getcontext().prec = 6
 LANGUAGE_CODE = "en-us"
 TIME_ZONE = "UTC"
 USE_I18N = True
-USE_L10N = True
 USE_TZ = True
 
 
@@ -319,15 +318,6 @@ STATIC_URL = "/static/"
 
 # Migrations
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-# Rollbar
-ROLLBAR = {
-    "access_token": ROLLBAR_TOKEN,
-    "environment": ROLLBAR_ENV,
-    "branch": "master",
-    "root": BASE_DIR,
-    "enabled": not DEBUG and not TEST_MODE,
-}
 
 mimetypes.add_type("application/javascript", ".js", True)
 

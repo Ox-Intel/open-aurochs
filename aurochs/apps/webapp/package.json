@@ -54,7 +54,7 @@
     "quill-image-uploader": "^1.2.3",
     "quill-markdown-shortcuts": "^0.0.10",
     "regenerator-runtime": "^0.13.11",
-    "rollbar": "^2.26.0",
+    "@sentry/vue": "^10.0.0",
     "tailwind": "^4.0.0",
     "tailwindcss": "^3.4.15",
     "terser": "5.17.7",

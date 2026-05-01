@@ -85,5 +85,4 @@ set_required_key("TEMP_NO_PUBLIC", False)
 set_required_key("HASHID_SALT", fallback="iALkYUc")
 set_required_key("METAPHOR_KEY", fallback="none")
 
-set_required_key("ROLLBAR_TOKEN", "not set")
-set_required_key("ROLLBAR_ENV", "dev")
+set_required_key("BUGSINK_DSN", fallback="not set")
