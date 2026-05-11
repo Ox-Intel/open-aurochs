@@ -48,7 +48,7 @@ psycopg2
 # pyppeteer
 python-docx
 python-pptx
-PyPDF2
+pypdf
 pytz
 rapidfuzz
 # scrapy

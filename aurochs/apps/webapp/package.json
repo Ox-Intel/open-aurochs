@@ -140,7 +140,14 @@
     "semver": "^7.5.2",
     "svgo": "^2.8.1",
     "ip": "^2.0.1",
-    "rollbar": "^2.26.4"
+    "rollbar": "^2.26.4",
+    "lodash": "^4.18.1",
+    "webpack": "^5.76.0",
+    "follow-redirects": "^1.15.4",
+    "micromatch": "^4.0.8",
+    "js-yaml": "^4.1.1",
+    "ws": "^8.17.1",
+    "prismjs": "^1.30.0"
   },
   "packageManager": "yarn@4.12.0"
 }
