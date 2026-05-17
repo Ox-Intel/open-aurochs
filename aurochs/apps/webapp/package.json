@@ -150,7 +150,8 @@
     "prismjs": "^1.30.0",
     "handlebars": "^4.7.9",
     "@babel/traverse": "^7.23.2",
-    "sha.js": "^2.4.12"
+    "sha.js": "^2.4.12",
+    "form-data@~2.3.2": "^2.5.4"
   },
   "packageManager": "yarn@4.12.0"
 }
