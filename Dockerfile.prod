@@ -1,3 +1,6 @@
+# syntax=docker/dockerfile:1.7
+
+# ============== js_build ==============
 FROM node:22-slim AS js_build
 
 ARG FONTAWESOME_NPM_TOKEN
@@ -7,45 +10,41 @@ ADD aurochs /project/aurochs
 ADD bin /project/bin
 
 WORKDIR /project
-RUN ./bin/build_js_apps.sh
+RUN ./bin/build_js_apps.sh \
+    && rm -rf \
+        aurochs/apps/webapp/.yarn aurochs/apps/webapp/node_modules \
+        aurochs/apps/public/.yarn aurochs/apps/public/node_modules \
+        node_modules
 
-FROM python:3.12-slim
 
-ENV PYTHONUNBUFFERED=1
-ENV PYTHONDONTWRITEBYTECODE=1
+# ============== py_builder ==============
+FROM python:3.12-slim AS py_builder
+
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PATH="/opt/venv/bin:$PATH"
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
-    tzdata \
-    curl \
-    libpq5 \
-    libpq-dev \
-    python3-cffi \
-    python3-brotli \
-    libpango-1.0-0 \
-    libharfbuzz0b \
-    libpangoft2-1.0-0 \
-    tesseract-ocr \
-    poppler-utils \
-    libmagic-dev \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN ln -fs /usr/share/zoneinfo/UTC /etc/localtime && \
-    dpkg-reconfigure --frontend noninteractive tzdata
+        build-essential libpq-dev libmagic-dev \
+        # WeasyPrint is imported at module load time (apps.py / urls.py), so
+        # `manage.py collectstatic` dlopens gobject/pango via CFFI. The runtime
+        # libs need to be present in the builder too, not only in runtime.
+        libpango-1.0-0 libharfbuzz0b libpangoft2-1.0-0 \
+    && rm -rf /var/lib/apt/lists/* \
+    && python -m venv /opt/venv
 
 WORKDIR /project
 
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Remove build tools (only needed for pip install)
-RUN apt-get purge -y --auto-remove build-essential && rm -rf /var/lib/apt/lists/*
-
 COPY --from=js_build /project/aurochs ./aurochs
 COPY --from=js_build /project/bin ./bin
 COPY manage.py ./
 
-# Collect static with dummy env vars (no secrets baked into image)
+# Collect static with build placeholders (no secrets baked into image).
 RUN DJANGO_SETTINGS_MODULE=aurochs.envs.production \
     DJANGO_SECRET_KEY=build-placeholder \
     AUROCHS_FRIENDLY_NAME=build \
@@ -57,26 +56,55 @@ RUN DJANGO_SETTINGS_MODULE=aurochs.envs.production \
     AUROCHS_ADMIN_EMAIL=build@localhost \
     AUROCHS_FROM_EMAIL=build@localhost \
     DATABASE_URL=sqlite:///tmp/build.db \
-    python manage.py collectstatic --noinput 2>/dev/null || true
+    python manage.py collectstatic --noinput
 
-# Clean up JS build artifacts, source maps, and test files
-RUN rm -rf aurochs/apps/webapp/.yarn \
-    aurochs/apps/webapp/node_modules \
-    aurochs/apps/public/.yarn \
-    aurochs/apps/public/node_modules \
-    node_modules \
-    collected_static/client/static/js/*.map \
-    collected_static/client/static/js/*.map.br \
-    collected_static/client/static/js/*.map.gz \
-    collected_static/client/js/*.map \
-    collected_static/client/js/*.map.br \
-    collected_static/client/js/*.map.gz \
-    cypress postman tests
+# Strip source maps and test artifacts from the built static output.
+RUN rm -rf \
+        collected_static/client/static/js/*.map \
+        collected_static/client/static/js/*.map.br \
+        collected_static/client/static/js/*.map.gz \
+        collected_static/client/js/*.map \
+        collected_static/client/js/*.map.br \
+        collected_static/client/js/*.map.gz \
+        cypress postman tests
 
-RUN groupadd -r appuser && useradd -r -g appuser appuser && \
-    chown -R appuser:appuser /project
+
+# ============== runtime ==============
+FROM python:3.12-slim AS runtime
+
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PATH="/opt/venv/bin:$PATH" \
+    TZ=UTC
+
+# Runtime native libs only.
+#   libpq5         — psycopg/psycopg2 PostgreSQL client
+#   libmagic1      — python-magic file-type detection (replaces build-time libmagic-dev)
+#   libpango*      — WeasyPrint PDF rendering
+#   tesseract-ocr  — OCR
+#   poppler-utils  — pdf2image / pdftoppm
+#   python3-cffi   } TODO: most likely redundant — pip's cffi/brotli wheels
+#   python3-brotli } already supply these via the venv. Verify and drop if safe.
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        tzdata curl \
+        libpq5 libmagic1 \
+        python3-cffi python3-brotli \
+        libpango-1.0-0 libharfbuzz0b libpangoft2-1.0-0 \
+        tesseract-ocr poppler-utils \
+    && ln -fs /usr/share/zoneinfo/UTC /etc/localtime \
+    && dpkg-reconfigure --frontend noninteractive tzdata \
+    && rm -rf /var/lib/apt/lists/* \
+    && groupadd -r appuser \
+    && useradd -r -g appuser -d /home/appuser -m appuser
+
 USER appuser
+WORKDIR /project
+
+COPY --from=py_builder --chown=appuser:appuser /opt/venv /opt/venv
+COPY --from=py_builder --chown=appuser:appuser /project /project
 
 EXPOSE 8000
 
-CMD ["uvicorn", "aurochs.asgi:application", "--host", "0.0.0.0", "--port", "8000", "--workers", "4"]
+CMD ["uvicorn", "aurochs.asgi:application", \
+     "--host", "0.0.0.0", "--port", "8000", \
+     "--workers", "4"]

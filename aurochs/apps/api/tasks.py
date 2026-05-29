@@ -26,14 +26,8 @@ from pdf2image import convert_from_bytes
 from pytesseract import image_to_string
 from docx2python import docx2python
 
-from langchain_core.prompts import PromptTemplate
-from langchain_openai import OpenAI
-from langchain.chains import LLMChain
 from langchain_openai import ChatOpenAI
-from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
-from langchain_community.agent_toolkits.load_tools import load_tools
-from langchain.agents import initialize_agent
-from langchain.agents import AgentType
+from langchain_core.messages import HumanMessage, SystemMessage
 from django.conf import settings
 from celery import current_app
 from django.contrib.contenttypes.models import ContentType

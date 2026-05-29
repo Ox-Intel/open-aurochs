@@ -35,6 +35,7 @@ INTERNAL_IPS = [
 
 DEBUG_TOOLBAR_CONFIG = {
     "SHOW_TOOLBAR_CALLBACK": "utils.middleware.show_toolbar_callback",
+    "IS_RUNNING_TESTS": False,
 }
 CSRF_TRUSTED_ORIGINS = [
     "https://oxe2e.ngrok.io",

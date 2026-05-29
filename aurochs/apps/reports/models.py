@@ -30,7 +30,6 @@ from reports.helpers import setup_pdf_worker_thread, generate_pdf_page_worker, a
 from sources.models import Source
 from utils.helpers import rel
 from utils.models import BaseModel, HashidPermissionedModel, HashidBaseModel
-from weasyprint import HTML
 
 
 class Report(HashidPermissionedModel):

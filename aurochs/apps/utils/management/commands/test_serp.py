@@ -9,12 +9,9 @@ from functools import partial
 from bs4 import BeautifulSoup
 from langchain_core.prompts import PromptTemplate
 from langchain_openai import OpenAI
-from langchain.chains import LLMChain
 from langchain_openai import ChatOpenAI
-from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
-from langchain_community.agent_toolkits.load_tools import load_tools
-from langchain.agents import initialize_agent
-from langchain.agents import AgentType
+from langchain_classic.chains import LLMChain
+from langchain_classic.agents import initialize_agent, load_tools, AgentType
 
 from api.events.base import BaseEventHandler
 from reports.models import Report
