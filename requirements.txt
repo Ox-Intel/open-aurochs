@@ -5,7 +5,7 @@ celery==5.6.0
 channels==4.2.0
 channels-redis==4.2.1
 chompjs==1.1.9
-cryptography==46.0.7
+cryptography==48.0.1
 csscompressor==0.9.5
 dj-database-url==0.5.0
 django-annoying==0.10.8
