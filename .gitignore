@@ -71,7 +71,8 @@ cypress/videos/*
 *.diff.png
 *.1
 
-# Yarn - FontAwesome Pro packages (requires license)
-aurochs/apps/webapp/.yarn/cache/@fortawesome*
-aurochs/apps/webapp/.yarn/unplugged/@fortawesome*
+# Yarn - FontAwesome Pro packages (requires license) are kept untracked via
+# .git/info/exclude (NOT .gitignore) so the deploy rsync — which honors
+# .gitignore — still ships the licensed cache zips into the build context,
+# while git never commits them to this public repo. Do not re-add them here.
 CLAUDE.md

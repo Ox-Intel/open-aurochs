@@ -43,7 +43,7 @@ metaphor_python==0.1.10
 mock==4.0.3
 openai==2.30.0
 sentry-sdk[django]
-Pillow==12.2.0
+Pillow==12.3.0
 piprot==0.9.11
 polytester==1.2.3
 psycopg2==2.9.11
@@ -70,6 +70,6 @@ docx2python==2.7.3
 
 # Security updates
 urllib3==2.7.0
-aiohttp==3.14.0
+aiohttp==3.14.1
 waitress==3.0.2
 setuptools==78.1.1
