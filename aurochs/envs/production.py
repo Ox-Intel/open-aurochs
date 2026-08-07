@@ -87,10 +87,14 @@ if 'DATABASE_URL' in os.environ:
     DATABASES = {
         'default': dj_database_url.config(
             default=os.environ['DATABASE_URL'],
-            conn_max_age=600,
+            # Default 0: transaction pooling (pgbouncer) requires per-request
+            # connections; gevent + persistent connections leak idle sockets.
+            conn_max_age=int(os.environ.get("CONN_MAX_AGE", "0")),
             ssl_require=os.environ.get('DATABASE_SSL_REQUIRED', 'False') == 'True'
         )
     }
+    if os.environ.get("DISABLE_SERVER_SIDE_CURSORS", "").lower() in ("1", "true", "yes"):
+        DATABASES["default"]["DISABLE_SERVER_SIDE_CURSORS"] = True
 else:
     # Fallback to local PostgreSQL
     DATABASES = {

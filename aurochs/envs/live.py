@@ -120,7 +120,13 @@ CACHES = {
 }
 
 
-DATABASES = {"default": dj_database_url.config(conn_max_age=600, ssl_require=True)}
+# CONN_MAX_AGE from env (default 0): aurochs runs behind Kizuku's transaction
+# pgbouncer, which requires per-request connections + no server-side cursors.
+# Suzuri injects CONN_MAX_AGE=0 and DISABLE_SERVER_SIDE_CURSORS when pooling.
+DATABASES = {"default": dj_database_url.config(
+    conn_max_age=int(os.environ.get("CONN_MAX_AGE", "0")), ssl_require=True)}
+if os.environ.get("DISABLE_SERVER_SIDE_CURSORS", "").lower() in ("1", "true", "yes"):
+    DATABASES["default"]["DISABLE_SERVER_SIDE_CURSORS"] = True
 # DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 # DEFAULT_FILE_STORAGE = "utils.storage.AurochsS3Storage"
 # STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
